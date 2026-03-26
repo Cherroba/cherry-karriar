@@ -2,6 +2,36 @@
    Cherry Karriarsida - Stylesheet
    ======================================== */
 
+/* --- Omnes Font --- */
+@font-face {
+  font-family: 'omnes';
+  src: url('fonts/omnes-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'omnes';
+  src: url('fonts/omnes-medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'omnes';
+  src: url('fonts/omnes-semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'omnes';
+  src: url('fonts/omnes-bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* --- CSS Custom Properties --- */
 :root {
   --cherry-bg: #1a0025;
@@ -18,7 +48,7 @@
   --cherry-radius-lg: 12px;
   --cherry-max-width: 1200px;
   --cherry-section-padding: 100px 24px;
-  --cherry-font: 'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif;
+  --cherry-font: 'omnes', 'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif;
   --cherry-transition: 0.3s ease;
 }
 
