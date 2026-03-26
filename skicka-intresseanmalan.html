@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skicka intresseanmalan - Cherry</title>
+  <link rel="stylesheet" href="cherry-karriar.css">
+  <style>
+    .page-content {
+      padding-top: 80px;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(255, 0, 89, 0.08), transparent 60%),
+        radial-gradient(ellipse at 70% 80%, rgba(80, 0, 100, 0.2), transparent 60%),
+        var(--cherry-bg);
+    }
+    .page-intro {
+      max-width: 700px;
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+    .page-intro h1 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .page-intro p {
+      color: var(--cherry-text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--cherry-text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+      transition: color 0.3s ease;
+    }
+    .back-link:hover { color: var(--cherry-pink); }
+    .back-link::before { content: '\2190'; }
+
+    /* Form card */
+    .form-card {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--cherry-card-bg);
+      border: 1px solid var(--cherry-card-border);
+      border-radius: var(--cherry-radius-lg);
+      padding: 40px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    .form-group label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .form-group label .required {
+      color: var(--cherry-pink);
+    }
+    .form-group input[type="text"],
+    .form-group select {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      color: #fff;
+      font-family: inherit;
+      transition: border-color 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .form-group input[type="text"]:focus,
+    .form-group select:focus {
+      border-color: var(--cherry-pink);
+      outline: none;
+      background: rgba(255,255,255,0.1);
+    }
+    .form-group input::placeholder {
+      color: rgba(255,255,255,0.3);
+    }
+    .form-group select option {
+      background: #25002D;
+      color: #fff;
+    }
+
+    .checkbox-group {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--cherry-pink);
+      cursor: pointer;
+    }
+    .checkbox-group label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+      cursor: pointer;
+    }
+
+    .form-note {
+      grid-column: 1 / -1;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      padding-top: 8px;
+    }
+
+    .form-buttons {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 16px;
+      padding-top: 8px;
+    }
+    .form-buttons .btn-submit {
+      padding: 14px 36px;
+      background: var(--cherry-pink);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .form-buttons .btn-submit:hover {
+      background: #e6004f;
+      transform: translateY(-2px);
+    }
+    .form-buttons .btn-cancel {
+      padding: 14px 28px;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-size: 1rem;
+      font-weight: 600;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .form-buttons .btn-cancel:hover {
+      border-color: rgba(255,255,255,0.3);
+      color: #fff;
+    }
+
+    .form-error {
+      color: var(--cherry-pink);
+      font-size: 0.85rem;
+      display: none;
+      padding-top: 4px;
+    }
+
+    /* Hidden iframe for submission */
+    .hidden-iframe { display: none; }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Meny">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="cherry-karriar.html" class="header-logo">
+        <img src="Cherry-Logo-Default-Alpha.svg" alt="Cherry">
+      </a>
+      <a href="https://cherry.se/kontakt" class="header-contact-btn">Kontakt</a>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="https://cherry.se">Hem</a>
+    <a href="https://cherry.se/samarbeten">Samarbeten</a>
+    <a href="https://cherry.se/events">Events</a>
+    <a href="cherry-karriar.html" class="active">Karriar</a>
+    <a href="https://cherry.se/support">Support</a>
+    <a href="https://cherry.se/kontakt">Kontakt</a>
+    <a href="https://cherry.se/om-cherry">Om Cherry</a>
+    <a href="https://cherry.se/spelregler">Spelregler</a>
+    <a href="https://cherry.se/spelomsorg">Spelomsorg</a>
+  </nav>
+
+  <!-- Hidden iframe that loads the real form for token extraction -->
+  <iframe id="sourceFrame" class="hidden-iframe" src="https://jokerpublish.cherry.se/softadmin.aspx?id=7"></iframe>
+
+  <main class="page-content">
+    <div class="container" style="padding-top: 40px;">
+
+      <a href="intresseanmalan.html" class="back-link">Tillbaka till Intresseanmalan</a>
+
+      <div class="page-intro">
+        <h1>Skicka intresseanmalan</h1>
+        <p>Fyll i formularet nedan sa hor vi av oss nar vi soker personal i din ort.</p>
+      </div>
+
+      <div class="form-card">
+        <form id="cherryForm" class="form-grid" action="https://jokerpublish.cherry.se/softadmin.aspx#i7" method="post">
+          <!-- Hidden fields populated from iframe -->
+          <input type="hidden" name="sa_pagecontext" id="hid_pagecontext">
+          <input type="hidden" name="sa_rawcontext" id="hid_rawcontext">
+          <input type="hidden" name="sa_postbackform" id="hid_postbackform">
+
+          <div class="form-group">
+            <label>Namn <span class="required">*</span></label>
+            <input type="text" name="Name" id="f_name" placeholder="Ditt namn" required>
+          </div>
+
+          <div class="form-group">
+            <label>Ort <span class="required">*</span></label>
+            <select name="ExternalDistrictID" id="f_ort" required>
+              <option value="0">Valj en ort</option>
+              <option value="119">Alingsas</option>
+              <option value="156">Arboga</option>
+              <option value="4">Arvidsjaur</option>
+              <option value="124">Arvika</option>
+              <option value="161">Avesta</option>
+              <option value="8">Bollnas</option>
+              <option value="97">Borgholm</option>
+              <option value="157">Borlange</option>
+              <option value="9">Boras</option>
+              <option value="102">Bastad</option>
+              <option value="91">Eksjo</option>
+              <option value="127">Eksjo och Nassjo</option>
+              <option value="146">Enkoping</option>
+              <option value="13">Eskilstuna</option>
+              <option value="150">Eslov</option>
+              <option value="14">Falkenberg</option>
+              <option value="87">Falkoping</option>
+              <option value="154">Falun</option>
+              <option value="122">Filipstad</option>
+              <option value="144">Finspang</option>
+              <option value="118">Gislaved</option>
+              <option value="115">Grebbestad</option>
+              <option value="131">Gallivare</option>
+              <option value="17">Gavle</option>
+              <option value="18">Goteborg</option>
+              <option value="20">Halmstad</option>
+              <option value="21">Haparanda</option>
+              <option value="164">Hedemora</option>
+              <option value="99">Helsingborg</option>
+              <option value="22">Hemavan</option>
+              <option value="148">Hudiksvall</option>
+              <option value="132">Hudiksvall och Ljusdal</option>
+              <option value="24">Harnosand</option>
+              <option value="104">Hassleholm</option>
+              <option value="137">Hono/Ockero</option>
+              <option value="149">Hoor</option>
+              <option value="25">Jonkoping</option>
+              <option value="26">Kalix</option>
+              <option value="27">Kalmar</option>
+              <option value="28">Karlshamn</option>
+              <option value="153">Karlskoga</option>
+              <option value="29">Karlskrona</option>
+              <option value="30">Karlstad</option>
+              <option value="130">Katowice, Poland</option>
+              <option value="159">Katrineholm</option>
+              <option value="117">Kinna</option>
+              <option value="31">Kiruna</option>
+              <option value="34">Kramfors</option>
+              <option value="103">Kristianstad</option>
+              <option value="121">Kristinehamn</option>
+              <option value="35">Kungsbacka</option>
+              <option value="112">Kungshamn</option>
+              <option value="106">Kungalv</option>
+              <option value="162">Koping</option>
+              <option value="101">Landskrona</option>
+              <option value="86">Lidkoping</option>
+              <option value="36">Linkoping</option>
+              <option value="81">Ljungby</option>
+              <option value="37">Ljusdal</option>
+              <option value="158">Ludvika</option>
+              <option value="136">Lulea/Boden</option>
+              <option value="95">Lund</option>
+              <option value="39">Lycksele</option>
+              <option value="111">Lysekil</option>
+              <option value="92">Malmo</option>
+              <option value="89">Mariestad</option>
+              <option value="107">Marstrand</option>
+              <option value="160">Mjolby</option>
+              <option value="152">Motala</option>
+              <option value="41">Norrkoping</option>
+              <option value="143">Norrtalje</option>
+              <option value="96">Nybro</option>
+              <option value="43">Nykoping</option>
+              <option value="79">Nassjo</option>
+              <option value="138">Olofstrom</option>
+              <option value="84">Oskarshamn</option>
+              <option value="45">Pitea</option>
+              <option value="98">Ronneby</option>
+              <option value="145">Sala</option>
+              <option value="85">Skara</option>
+              <option value="49">Skelleftea</option>
+              <option value="50">Skovde</option>
+              <option value="129">Sliema, Malta</option>
+              <option value="113">Smogen</option>
+              <option value="55">Solleftea</option>
+              <option value="57">Stenungsund</option>
+              <option value="58">Stockholm</option>
+              <option value="163">Strangnas</option>
+              <option value="59">Stromstad</option>
+              <option value="60">Stromsund</option>
+              <option value="62">Sundsvall</option>
+              <option value="123">Sunne</option>
+              <option value="125">Saffle</option>
+              <option value="134">Salen</option>
+              <option value="63">Soderhamn</option>
+              <option value="105">Solvesborg</option>
+              <option value="114">Tanumshede</option>
+              <option value="88">Tidaholm</option>
+              <option value="90">Tranas</option>
+              <option value="93">Trelleborg</option>
+              <option value="109">Trollhattan</option>
+              <option value="151">Trosa</option>
+              <option value="108">Uddevalla</option>
+              <option value="116">Ulricehamn</option>
+              <option value="66">Umea</option>
+              <option value="67">Uppsala</option>
+              <option value="120">Vara</option>
+              <option value="68">Varberg</option>
+              <option value="135">Vemdalen</option>
+              <option value="139">Vimmerby</option>
+              <option value="142">Visby</option>
+              <option value="110">Vanersborg</option>
+              <option value="82">Varnamo</option>
+              <option value="83">Vastervik</option>
+              <option value="71">Vasteras</option>
+              <option value="80">Vaxjo</option>
+              <option value="94">Ystad</option>
+              <option value="126">Amal</option>
+              <option value="73">Are</option>
+              <option value="155">Alvsbyn</option>
+              <option value="100">Angelholm</option>
+              <option value="74">Orebro</option>
+              <option value="75">Ornskoldsvik</option>
+              <option value="76">Ostersund</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>E-post <span class="required">*</span></label>
+            <input type="text" name="Email" id="f_email" placeholder="din@email.se" required>
+          </div>
+
+          <div class="form-group">
+            <label>Mobiltelefon <span class="required">*</span></label>
+            <input type="text" name="Mobile" id="f_mobile" placeholder="07X-XXX XX XX" required>
+          </div>
+
+          <div class="form-group">
+            <label>Kon <span class="required">*</span></label>
+            <select name="IsMale" id="f_kon" required>
+              <option value="1">Man</option>
+              <option value="0">Kvinna</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Fodelsear <span class="required">*</span></label>
+            <input type="text" name="BirthYear" id="f_birthyear" placeholder="T.ex. 1995" required>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" name="PreviousExperience" id="f_experience" value="1">
+            <label for="f_experience">Tidigare yrkesvana inom casinobranschen</label>
+          </div>
+
+          <div class="form-note">
+            Du maste lasa igenom var Integritetspolicy pa nasta sida innan du kan skicka in din ansokan. Tryck nedan pa knappen Vidare for att komma dit och sen trycker du pa Spara langs ner i texten for att din ansokan ska skickas in.
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" class="btn-submit">Vidare</button>
+            <a href="intresseanmalan.html" class="btn-cancel">Avbryt</a>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <nav class="footer-nav">
+        <a href="https://cherry.se">Hem</a>
+        <a href="https://cherry.se/samarbeten">Samarbeten</a>
+        <a href="https://cherry.se/events">Events</a>
+        <a href="cherry-karriar.html">Karriar</a>
+        <a href="https://cherry.se/support">Support</a>
+        <a href="https://cherry.se/kontakt">Kontakt</a>
+        <a href="https://cherry.se/om-cherry">Om Cherry</a>
+        <a href="https://cherry.se/spelregler">Spelregler</a>
+        <a href="https://cherry.se/spelomsorg">Spelomsorg</a>
+      </nav>
+      <div class="footer-logo">
+        <img src="Cherry-Logo-Default-Alpha.svg" alt="Cherry">
+      </div>
+      <div class="footer-copyright">&copy; 2026 Cherry. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="cherry-karriar.js"></script>
+  <script>
+    // Copy hidden token fields from the iframe form to our form before submit
+    const iframe = document.getElementById('sourceFrame');
+    const form = document.getElementById('cherryForm');
+
+    iframe.addEventListener('load', () => {
+      try {
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const iframeForm = iframeDoc.querySelector('form');
+        if (iframeForm) {
+          document.getElementById('hid_pagecontext').value = iframeForm.querySelector('[name="sa_pagecontext"]')?.value || '';
+          document.getElementById('hid_rawcontext').value = iframeForm.querySelector('[name="sa_rawcontext"]')?.value || '';
+          document.getElementById('hid_postbackform').value = iframeForm.querySelector('[name="sa_postbackform"]')?.value || '';
+        }
+      } catch (e) {
+        // Cross-origin: fall back to direct redirect
+        console.log('Cross-origin iframe, will redirect on submit');
+      }
+    });
+
+    form.addEventListener('submit', (e) => {
+      const pagecontext = document.getElementById('hid_pagecontext').value;
+      // If we couldn't get tokens (cross-origin), redirect to jokerpublish directly
+      if (!pagecontext) {
+        e.preventDefault();
+        window.location.href = 'https://jokerpublish.cherry.se/softadmin.aspx?id=7';
+      }
+    });
+  </script>
+</body>
+</html>

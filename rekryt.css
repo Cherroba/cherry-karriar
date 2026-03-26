@@ -1,0 +1,656 @@
+/* ========================================
+   Cherry Rekryt - Tema (ersatter rekryt.css)
+   Matchar cherry.se / karriarsidan
+   ======================================== */
+
+/* --- Base --- */
+html {
+  background-color: #1a0025;
+}
+
+BODY {
+  background-color: #1a0025;
+  background-attachment: fixed;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-image: none;
+  color: #ffffff;
+  font-family: 'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: normal;
+  text-decoration: none;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Layout --- */
+.row {
+  float: left;
+  width: 100%;
+}
+
+.content {
+  margin: 0 auto;
+  padding: 20px 24px;
+  max-width: 940px;
+}
+
+.content-wrap {
+  margin: 0 auto;
+  max-width: 940px;
+}
+
+/* --- Header / Logo --- */
+.headerwrapper {
+  float: left;
+  width: 100%;
+  height: auto;
+  background: rgba(26, 0, 37, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 16px 0;
+}
+
+#sublogo {
+  height: auto;
+  margin: 0 auto;
+  width: 300px;
+  padding: 12px 0;
+}
+
+#sublogo img {
+  display: block;
+  margin: 0 auto;
+  max-height: 50px;
+  width: auto;
+}
+
+/* --- Subwrapper / Main Content --- */
+.subwrapper {
+  background-color: transparent;
+  float: left;
+  width: 100%;
+}
+
+/* --- Typography --- */
+a {
+  color: #FF0059;
+  outline: 0 none;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:focus {
+  outline: 1px dotted #FF0059;
+}
+
+a:hover {
+  color: #ff3380;
+  text-decoration: none;
+}
+
+.dvMainTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.dvMainSubTitle {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+P {
+  font-size: 14px;
+  margin: 7px 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* --- Tables (Job Listings) --- */
+table {
+  left: 0;
+  margin-left: 0;
+  padding-left: 0;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+table tr {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+table tr:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+table td {
+  padding: 14px 16px;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+table tr td:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+table tr td:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+table a {
+  color: #FF0059;
+  font-weight: 600;
+}
+
+table a:hover {
+  color: #ff3380;
+}
+
+.td_one {
+  width: 55%;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.td_two {
+  width: 25%;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+
+.td_three {
+  width: 20%;
+  text-align: right;
+}
+
+.title_one {
+  float: left;
+  margin-left: 3px;
+  width: 69%;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.title_two {
+  float: left;
+  width: 30%;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.list_table {
+  width: 100%;
+}
+
+/* --- Page backgrounds --- */
+#page3 {
+  background-color: #1a0025;
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(255, 0, 89, 0.08), transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(80, 0, 100, 0.2), transparent 60%);
+  min-height: 100vh;
+}
+
+#page4 {
+  background-color: #1a0025;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(80, 0, 100, 0.25), transparent 70%);
+  min-height: 100vh;
+}
+
+#page5 {
+  background-color: #1a0025;
+  min-height: 100vh;
+}
+
+#page6 {
+  background-color: #1a0025;
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(255, 0, 89, 0.08), transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(80, 0, 100, 0.2), transparent 60%);
+  min-height: 100vh;
+}
+
+#page7 {
+  background-color: #1a0025;
+  min-height: 100vh;
+}
+
+#page8 {
+  background-color: #1a0025;
+  min-height: 100vh;
+}
+
+#page2 {
+  background-color: #1a0025;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(80, 0, 100, 0.25), transparent 70%);
+  max-width: 100%;
+  min-height: 100vh;
+}
+
+/* --- Forms --- */
+label {
+  color: #ffffff;
+  float: left;
+  padding: 10px;
+  font-size: 16px;
+  white-space: nowrap !important;
+  width: 100%;
+  word-wrap: normal !important;
+  font-weight: bold;
+}
+
+.blank_input {
+  color: rgba(255, 255, 255, 0.5);
+  float: left;
+  width: 100%;
+}
+
+input[type="text"] {
+  background-color: rgba(255, 255, 255, 0.08);
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+  padding: 12px 20px 12px 16px;
+  font-family: 'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif;
+  color: #ffffff;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+  border-color: #FF0059;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+input[type="checkbox"] {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  content: "";
+  display: inline-block;
+  height: 34px;
+  margin-right: 10px;
+  padding: 2px;
+  text-align: center;
+  vertical-align: middle;
+  width: 20px;
+  accent-color: #FF0059;
+}
+
+input[type="file"] {
+  background-color: rgba(255, 255, 255, 0.08);
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+  margin-bottom: 10px;
+  padding: 30px 20px 12px 16px;
+  width: 65%;
+  font-family: 'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+textarea {
+  background-color: rgba(255, 255, 255, 0.08);
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+  padding: 12px 20px 12px 16px;
+  transition: border-color 0.3s ease, width 0.4s ease-in-out;
+  width: 77%;
+  color: #ffffff;
+  font-family: 'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif;
+}
+
+textarea:focus {
+  width: 80%;
+  border-color: #FF0059;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+select {
+  background-color: rgba(255, 255, 255, 0.08);
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+  height: 47px;
+  transition: border-color 0.3s ease;
+  white-space: nowrap !important;
+  width: 65%;
+  word-wrap: normal !important;
+  color: #ffffff;
+}
+
+select:focus {
+  border-color: #FF0059;
+  outline: none;
+}
+
+select option {
+  background-color: #25002D;
+  color: #ffffff;
+}
+
+button {
+  background-color: #FF0059;
+  background-image: none;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  border: none;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+  padding: 12px 28px;
+  white-space: nowrap !important;
+  word-wrap: normal !important;
+  margin-top: 10px;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  background-color: #e6004f;
+  transform: translateY(-2px);
+}
+
+#xsubmit {
+  float: left;
+  margin-right: 20px;
+  margin-top: 20px;
+  width: auto;
+  min-width: 120px;
+}
+
+#xcancel {
+  float: left;
+  margin-top: 20px;
+  width: auto;
+  min-width: 100px;
+  background-color: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#xcancel:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* --- Form Layout --- */
+.form_field {
+  float: left;
+  padding: 10px;
+}
+
+.form_field_full {
+  float: left;
+  padding: 10px;
+  width: 100%;
+}
+
+.xi {
+  float: left;
+  margin-top: 5px;
+}
+
+.xi-text {
+  float: left;
+  max-width: 65%;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#text_field {
+  color: rgba(255, 255, 255, 0.5);
+  padding-bottom: 10px;
+  padding-top: 10px;
+  width: 60%;
+  font-size: 14px;
+}
+
+#xi8 > select,
+#xi13 > select,
+#xi17 > select {
+  padding-left: 25%;
+  padding-top: 7px;
+}
+
+/* --- Wrapper (for form pages) --- */
+.wrapper {
+  border: medium none;
+  height: auto;
+  margin: 0 auto;
+  overflow: hidden;
+  width: 600px;
+  max-width: 95%;
+}
+
+/* --- Footer --- */
+.footerwrapper {
+  float: left;
+  padding: 16px 10px;
+}
+
+.footerwrapper a {
+  color: #FF0059;
+  float: left;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  padding: 10px 24px;
+  border: 2px solid #FF0059;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.footerwrapper a:hover {
+  background: #FF0059;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* --- Info/breadtext --- */
+.breadtext {
+  color: rgba(255, 255, 255, 0.4);
+  float: left;
+  font-size: 10px;
+  font-style: italic;
+  padding: 10px;
+}
+
+.infotext {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  float: left;
+  padding: 16px;
+  width: 100%;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  margin-top: 20px;
+}
+
+/* --- Social --- */
+#social {
+  float: left;
+  height: 40px;
+  width: 100%;
+}
+
+#fbook {
+  float: left;
+  height: auto;
+  margin-top: 20px;
+  width: 45%;
+}
+
+#twitter {
+  float: right;
+  height: auto;
+  margin-top: 20px;
+  text-align: right;
+  width: 45%;
+}
+
+.twitter-share-button {
+  width: 78px !important;
+}
+
+/* --- Thank You page --- */
+.tack {
+  color: #FF0059;
+  font-size: 18px;
+  font-weight: bold;
+  min-height: 250px;
+  padding-top: 130px;
+  text-align: center;
+  width: 500px;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+/* --- Warning --- */
+.warning {
+  color: #FF0059;
+  font-weight: 600;
+}
+
+/* --- Pay Logo (fallback) --- */
+.paylogo {
+  background-image: url("https://cherry.se/v2/wp-content/uploads/Cherry-logo-stylised-horizontal_spelgladje-AB.png");
+  height: 73px;
+  width: 300px;
+  background-repeat: no-repeat;
+  margin: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.paytitle {
+  font-size: 18px;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+.downloadfile {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* --- Responsive --- */
+@media all and (max-width: 850px) {
+  .xi {
+    width: 100%;
+  }
+  .content {
+    width: 100%;
+    padding: 16px;
+  }
+  .footer-special {
+    width: 100%;
+  }
+}
+
+@media all and (min-width: 851px) and (max-width: 1280px) {
+  .content {
+    width: 99%;
+  }
+  .footer-special {
+    width: 99%;
+  }
+}
+
+@media all and (min-width: 1281px) {
+  .content {
+    width: 100%;
+  }
+  .footer-special {
+    width: 100%;
+  }
+}
+
+@media all and (min-width: 851px) {
+  .xi {
+    width: 50%;
+  }
+}
+
+@media all and (max-width: 750px) {
+  .list_table {
+    font-size: 12px;
+  }
+  .form_field {
+    width: 100%;
+  }
+  table td {
+    padding: 10px 12px;
+  }
+}
+
+@media all and (min-width: 751px) {
+  .form_field {
+    width: 45%;
+  }
+}
+
+.footer-special {
+  margin: 0 auto;
+}
+
+/* --- Scrollbar styling --- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a0025;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 0, 89, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 0, 89, 0.6);
+}
