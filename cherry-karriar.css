@@ -836,14 +836,10 @@ ul, ol {
 @media (max-width: 768px) {
   .video-mobile {
     display: block !important;
-    margin: 0 auto;
-    aspect-ratio: 9 / 16;
     width: 100%;
-    max-width: 320px;
     height: auto;
   }
   .video-desktop { display: none !important; }
-  .video-wrapper { display: flex; justify-content: center; }
 
   :root {
     --cherry-section-padding: 64px 20px;
