@@ -54,8 +54,12 @@
         <h2 class="section-heading animate-on-scroll">Livet på Cherry</h2>
         <p class="section-subtext animate-on-scroll">Få en inblick i hur det är att jobba hos oss.</p>
         <div class="video-wrapper animate-on-scroll">
-          <video controls playsinline preload="metadata" style="width:100%;border-radius:var(--cherry-radius-lg);">
+          <video class="video-desktop" controls playsinline preload="metadata" style="width:100%;border-radius:var(--cherry-radius-lg);">
             <source src="cherry-video.mp4" type="video/mp4">
+            Din webbläsare stöder inte videouppspelning.
+          </video>
+          <video class="video-mobile" controls playsinline preload="metadata" style="width:100%;max-width:400px;margin:0 auto;display:none;border-radius:var(--cherry-radius-lg);">
+            <source src="cherry-video-mobile.mp4" type="video/mp4">
             Din webbläsare stöder inte videouppspelning.
           </video>
         </div>

@@ -829,7 +829,14 @@ ul, ol {
   }
 }
 
+/* Responsive video: desktop vs mobile */
+.video-mobile { display: none !important; }
+.video-desktop { display: block; }
+
 @media (max-width: 768px) {
+  .video-mobile { display: block !important; margin: 0 auto; }
+  .video-desktop { display: none !important; }
+
   :root {
     --cherry-section-padding: 64px 20px;
   }
