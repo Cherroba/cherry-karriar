@@ -1160,85 +1160,30 @@ ul, ol {
     min-width: 240px;
   }
 
+  /* Jobs: normal scrolling layout on mobile (no sticky) */
   .jobs-scroll-container {
-    height: 300vh;
+    height: auto;
   }
   .jobs-section {
-    height: 100svh;
-    height: 100vh; /* fallback */
-    padding-top: 70px !important;
-    justify-content: flex-start !important;
-  }
-  @supports (height: 100svh) {
-    .jobs-section {
-      height: 100svh;
-    }
-  }
-  .jobs-section .container {
-    width: 100%;
-    padding: 0 20px;
-  }
-  .jobs-section .section-heading {
-    font-size: 1.5rem;
-    margin-bottom: 6px;
-  }
-  .jobs-section .section-subtext {
-    font-size: 0.8rem;
-    margin-bottom: 10px;
-    line-height: 1.4;
+    position: relative;
+    height: auto;
+    overflow: visible;
+    padding: 60px 0 40px !important;
   }
   .jobs-preview {
-    position: relative;
-    display: block;
-    height: 180px;
-    overflow: hidden;
-    margin: 0 0 8px 0;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
   }
-  .jobs-preview .job-card {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    opacity: 0;
-    transform: translateX(60px) scale(0.96);
-    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    pointer-events: none;
-    padding: 16px;
-  }
-  .jobs-preview .job-card h3 {
-    font-size: 1rem;
-    margin-bottom: 6px;
-  }
-  .jobs-preview .job-card p {
-    font-size: 0.78rem;
-    margin-bottom: 8px;
-    line-height: 1.4;
-  }
-  .jobs-preview .job-card .job-card-link {
-    font-size: 0.8rem;
-  }
-  .jobs-preview .job-card.card-active {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-    pointer-events: auto;
-  }
-  .jobs-preview .job-card.card-exit {
-    opacity: 0;
-    transform: translateX(-60px) scale(0.96);
-  }
-
   .jobs-cta {
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 12px;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
   }
   .jobs-cta .btn-primary,
   .jobs-cta .btn-outline {
-    padding: 12px 18px;
-    font-size: 0.8rem;
-    flex: 1;
+    width: 100%;
+    max-width: 320px;
     text-align: center;
   }
 
