@@ -439,7 +439,7 @@ ul, ol {
   justify-content: flex-start;
   overflow: hidden;
   background: var(--cherry-bg);
-  padding-top: 120px;
+  padding-top: max(12vh, 90px);
 }
 
 .team-grid {
@@ -1064,7 +1064,7 @@ ul, ol {
   }
   .team-section {
     padding: 0 !important;
-    padding-top: 120px !important;
+    padding-top: max(10vh, 90px) !important;
     justify-content: flex-start !important;
   }
   .team-section .container {
