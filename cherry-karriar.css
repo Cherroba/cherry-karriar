@@ -434,11 +434,12 @@ ul, ol {
   top: 0;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: hidden;
   background: var(--cherry-bg);
-  padding-top: 80px;
+  padding-top: 120px;
 }
 
 .team-grid {
@@ -1063,6 +1064,8 @@ ul, ol {
   }
   .team-section {
     padding: 0 !important;
+    padding-top: 120px !important;
+    justify-content: flex-start !important;
   }
   .team-section .container {
     width: 100%;
