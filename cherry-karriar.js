@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- Scroll-Triggered Animations (IntersectionObserver) ---
+  const isDesktop = window.innerWidth > 768;
   const animatedElements = document.querySelectorAll('.animate-on-scroll');
 
   if (animatedElements.length > 0 && 'IntersectionObserver' in window) {
@@ -33,7 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
+          if (!(isDesktop && entry.target.classList.contains('testimonial-card'))) {
+            observer.unobserve(entry.target);
+          }
+        } else if (isDesktop && entry.target.classList.contains('testimonial-card')) {
+          entry.target.classList.remove('is-visible');
         }
       });
     }, {
@@ -43,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     animatedElements.forEach(el => observer.observe(el));
   } else {
-    // Fallback: show all elements immediately
     animatedElements.forEach(el => el.classList.add('is-visible'));
   }
 
