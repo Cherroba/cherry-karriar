@@ -1019,28 +1019,52 @@ ul, ol {
     font-size: clamp(2rem, 8vw, 2.8rem);
   }
 
-  .team-grid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 16px;
-    padding-bottom: 16px;
-    scrollbar-width: none; /* Firefox */
+  .team-scroll-container {
+    height: 300vh; /* 3 cards worth of scroll */
+    position: relative;
   }
-  .team-grid::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+  .team-section {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 0 !important;
+  }
+  .team-section .container {
+    width: 100%;
+    padding: 0 20px;
+  }
+  .team-grid {
+    position: relative;
+    display: block;
+    height: 420px;
   }
   .team-grid .testimonial-card {
-    flex: 0 0 85%;
-    scroll-snap-align: center;
-    min-width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transform: translateX(80px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+  }
+  .team-grid .testimonial-card.card-active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .team-grid .testimonial-card.card-exit {
+    opacity: 0;
+    transform: translateX(-80px);
   }
   .team-dots {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin-top: 8px;
+    margin-top: 16px;
   }
   .team-dot {
     width: 8px;

@@ -91,19 +91,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
-  // --- Testimonial Card Swipe Dots (mobile) ---
-  const teamGrid = document.querySelector('.team-grid');
-  const teamDots = document.querySelectorAll('.team-dot');
+  // --- Testimonial Cards: scroll-driven on mobile ---
+  var teamContainer = document.getElementById('teamContainer');
+  var teamCards = document.querySelectorAll('.testimonial-card[data-card]');
+  var teamDots = document.querySelectorAll('.team-dot');
+  var currentTeamCard = -1;
 
-  if (teamGrid && teamDots.length > 0) {
-    teamGrid.addEventListener('scroll', function() {
-      var scrollLeft = teamGrid.scrollLeft;
-      var cardWidth = teamGrid.querySelector('.testimonial-card').offsetWidth + 16; // gap
-      var activeIndex = Math.round(scrollLeft / cardWidth);
-      teamDots.forEach(function(dot, i) {
-        dot.classList.toggle('active', i === activeIndex);
-      });
-    }, { passive: true });
+  function updateTeamCard(index) {
+    if (index === currentTeamCard) return;
+    currentTeamCard = index;
+
+    teamCards.forEach(function(card, i) {
+      card.classList.remove('card-active', 'card-exit');
+      if (i === index) {
+        card.classList.add('card-active');
+      } else if (i < index) {
+        card.classList.add('card-exit');
+      }
+      // i > index: default state (translateX(80px), opacity 0)
+    });
+
+    teamDots.forEach(function(dot, i) {
+      dot.classList.toggle('active', i === index);
+    });
+  }
+
+  function onTeamScroll() {
+    if (!teamContainer || window.innerWidth > 768) return;
+    var rect = teamContainer.getBoundingClientRect();
+    var scrolled = -rect.top;
+    var range = teamContainer.offsetHeight - window.innerHeight;
+    if (scrolled < 0) { updateTeamCard(0); return; }
+    if (scrolled > range) return;
+    var progress = scrolled / range;
+    var total = teamCards.length;
+    var idx = Math.min(Math.floor(progress * total), total - 1);
+    updateTeamCard(idx);
+  }
+
+  if (teamContainer && teamCards.length > 0 && window.innerWidth <= 768) {
+    updateTeamCard(0);
+    window.addEventListener('scroll', onTeamScroll, { passive: true });
+    window.addEventListener('resize', function() {
+      if (window.innerWidth <= 768) {
+        onTeamScroll();
+      }
+    });
   }
 
   // --- Rainbow Arc Values Section ---
