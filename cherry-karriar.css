@@ -424,8 +424,19 @@ ul, ol {
 }
 
 /* --- Team / Testimonials Section --- */
+.team-scroll-container {
+  height: 250vh;
+  position: relative;
+}
+
 .team-section {
-  padding: var(--cherry-section-padding);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   background: var(--cherry-bg);
 }
 
@@ -446,15 +457,31 @@ ul, ol {
   transition: transform var(--cherry-transition), box-shadow var(--cherry-transition);
 }
 
-/* Staggered fade-in on desktop */
-.testimonial-card.animate-on-scroll {
-  transition: opacity 0.8s ease, transform 0.8s ease;
+/* Desktop scroll-driven fade for testimonials */
+.testimonial-card.team-fade {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
-.testimonial-card[data-card="1"].animate-on-scroll {
-  transition-delay: 0.25s;
+.testimonial-card[data-card="1"].team-fade {
+  transition-delay: 0.15s;
 }
-.testimonial-card[data-card="2"].animate-on-scroll {
-  transition-delay: 0.5s;
+.testimonial-card[data-card="2"].team-fade {
+  transition-delay: 0.3s;
+}
+.testimonial-card.team-fade.team-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.testimonial-card.team-fade.team-exit {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.testimonial-card[data-card="1"].team-fade.team-exit {
+  transition-delay: 0.1s;
+}
+.testimonial-card[data-card="2"].team-fade.team-exit {
+  transition-delay: 0.2s;
 }
 
 .testimonial-card:hover {
@@ -1031,16 +1058,9 @@ ul, ol {
   }
 
   .team-scroll-container {
-    height: 300vh; /* 3 cards worth of scroll */
-    position: relative;
+    height: 300vh;
   }
   .team-section {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
     padding: 0 !important;
   }
   .team-section .container {

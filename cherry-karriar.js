@@ -34,11 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
-          if (!(isDesktop && entry.target.classList.contains('testimonial-card'))) {
-            observer.unobserve(entry.target);
-          }
-        } else if (isDesktop && entry.target.classList.contains('testimonial-card')) {
-          entry.target.classList.remove('is-visible');
+          observer.unobserve(entry.target);
         }
       });
     }, {
@@ -46,9 +42,61 @@ document.addEventListener('DOMContentLoaded', () => {
       rootMargin: '0px 0px -40px 0px'
     });
 
-    animatedElements.forEach(el => observer.observe(el));
+    animatedElements.forEach(el => {
+      // Skip testimonial cards on desktop — handled by scroll-driven fade
+      if (isDesktop && el.classList.contains('testimonial-card')) return;
+      observer.observe(el);
+    });
   } else {
     animatedElements.forEach(el => el.classList.add('is-visible'));
+  }
+
+  // --- Desktop: scroll-driven testimonial fade in/out ---
+  if (isDesktop) {
+    var teamContainerDesktop = document.getElementById('teamContainer');
+    var desktopCards = document.querySelectorAll('.testimonial-card[data-card]');
+
+    if (teamContainerDesktop && desktopCards.length > 0) {
+      // Add team-fade class to enable scroll-driven animation
+      desktopCards.forEach(function(card) {
+        card.classList.add('team-fade');
+      });
+
+      function onDesktopTeamScroll() {
+        var rect = teamContainerDesktop.getBoundingClientRect();
+        var scrolled = -rect.top;
+        var range = teamContainerDesktop.offsetHeight - window.innerHeight;
+
+        if (scrolled < 0 || scrolled > range) {
+          desktopCards.forEach(function(card) {
+            card.classList.remove('team-visible', 'team-exit');
+          });
+          return;
+        }
+
+        var progress = scrolled / range; // 0 to 1
+        // 0–0.3: fade in, 0.3–0.7: hold, 0.7–1.0: fade out
+        if (progress < 0.3) {
+          desktopCards.forEach(function(card) {
+            card.classList.add('team-visible');
+            card.classList.remove('team-exit');
+          });
+        } else if (progress > 0.7) {
+          desktopCards.forEach(function(card) {
+            card.classList.remove('team-visible');
+            card.classList.add('team-exit');
+          });
+        } else {
+          desktopCards.forEach(function(card) {
+            card.classList.add('team-visible');
+            card.classList.remove('team-exit');
+          });
+        }
+      }
+
+      window.addEventListener('scroll', onDesktopTeamScroll, { passive: true });
+      onDesktopTeamScroll();
+    }
   }
 
   // --- Video Lazy Load ---
