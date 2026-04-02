@@ -1163,17 +1163,29 @@ ul, ol {
     height: 300vh;
   }
   .jobs-section {
-    padding-top: max(8vh, 76px) !important;
+    height: 100svh;
+    height: 100vh; /* fallback */
+    padding-top: 70px !important;
     justify-content: flex-start !important;
   }
+  @supports (height: 100svh) {
+    .jobs-section {
+      height: 100svh;
+    }
+  }
+  .jobs-section .section-heading {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+  }
   .jobs-section .section-subtext {
-    font-size: 0.85rem;
-    margin-bottom: 12px;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    line-height: 1.4;
   }
   .jobs-preview {
     position: relative;
     display: block;
-    height: 220px;
+    height: 190px;
   }
   .jobs-preview .job-card {
     position: absolute;
@@ -1185,12 +1197,19 @@ ul, ol {
     transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
                 transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     pointer-events: none;
-    padding: 20px;
+    padding: 16px;
+  }
+  .jobs-preview .job-card h3 {
+    font-size: 1rem;
+    margin-bottom: 6px;
   }
   .jobs-preview .job-card p {
-    font-size: 0.82rem;
-    margin-bottom: 12px;
-    line-height: 1.5;
+    font-size: 0.78rem;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .jobs-preview .job-card .job-card-link {
+    font-size: 0.8rem;
   }
   .jobs-preview .job-card.card-active {
     opacity: 1;
@@ -1205,6 +1224,12 @@ ul, ol {
   .jobs-cta {
     flex-direction: column;
     align-items: center;
+    gap: 10px;
+  }
+  .jobs-cta .btn-primary,
+  .jobs-cta .btn-outline {
+    padding: 12px 24px;
+    font-size: 0.9rem;
   }
 
   .jobs-cta .btn-primary,
