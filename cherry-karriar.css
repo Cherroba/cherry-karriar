@@ -1162,20 +1162,23 @@ ul, ol {
 
   /* Jobs: normal scrolling layout on mobile (no sticky) */
   .jobs-scroll-container {
-    height: auto;
+    height: auto !important;
   }
   .jobs-section {
-    position: relative;
-    height: auto;
-    overflow: visible;
-    padding: 60px 0 40px !important;
+    position: relative !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 60px 20px 40px !important;
+    display: block !important;
   }
   .jobs-preview {
+    display: grid !important;
     grid-template-columns: 1fr;
     gap: 16px;
     margin-bottom: 24px;
   }
   .jobs-cta {
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
@@ -1185,12 +1188,6 @@ ul, ol {
     width: 100%;
     max-width: 320px;
     text-align: center;
-  }
-
-  .jobs-cta .btn-primary,
-  .jobs-cta .btn-outline {
-    width: 100%;
-    max-width: 320px;
   }
 
   .footer-nav {
