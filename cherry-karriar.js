@@ -155,16 +155,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     teamCards.forEach(function(card, i) {
       card.classList.remove('card-active', 'card-exit');
-      if (i === index) {
-        card.classList.add('card-active');
-      } else if (i < index) {
-        card.classList.add('card-exit');
+      if (index >= 0) {
+        if (i === index) {
+          card.classList.add('card-active');
+        } else if (i < index) {
+          card.classList.add('card-exit');
+        }
       }
-      // i > index: default state (translateX(80px), opacity 0)
     });
 
     teamDots.forEach(function(dot, i) {
-      dot.classList.toggle('active', i === index);
+      dot.classList.toggle('active', index >= 0 && i === index);
     });
   }
 
@@ -173,16 +174,28 @@ document.addEventListener('DOMContentLoaded', () => {
     var rect = teamContainer.getBoundingClientRect();
     var scrolled = -rect.top;
     var range = teamContainer.offsetHeight - window.innerHeight;
-    if (scrolled < 0) { updateTeamCard(0); return; }
+    if (scrolled < 0) { updateTeamCard(-1); return; }
     if (scrolled > range) return;
-    var progress = scrolled / range;
+
+    var progress = scrolled / range; // 0 to 1
+    // 0–0.1: empty intro, 0.1–0.8: cycle cards, 0.8–1.0: empty outro
+    var intro = 0.1;
+    var outro = 0.2;
     var total = teamCards.length;
-    var idx = Math.min(Math.floor(progress * total), total - 1);
-    updateTeamCard(idx);
+
+    if (progress < intro) {
+      updateTeamCard(-1);
+    } else if (progress > (1 - outro)) {
+      updateTeamCard(-1);
+    } else {
+      var p = (progress - intro) / (1 - intro - outro);
+      var idx = Math.min(Math.floor(p * total), total - 1);
+      updateTeamCard(idx);
+    }
   }
 
   if (teamContainer && teamCards.length > 0 && window.innerWidth <= 768) {
-    updateTeamCard(0);
+    updateTeamCard(-1);
     window.addEventListener('scroll', onTeamScroll, { passive: true });
     window.addEventListener('resize', function() {
       if (window.innerWidth <= 768) {
