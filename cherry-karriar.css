@@ -1047,18 +1047,18 @@ ul, ol {
     left: 0;
     right: 0;
     opacity: 0;
-    transform: translateX(80px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: scale(0.93);
+    transition: opacity 0.5s ease, transform 0.5s ease;
     pointer-events: none;
   }
   .team-grid .testimonial-card.card-active {
     opacity: 1;
-    transform: translateX(0);
+    transform: scale(1);
     pointer-events: auto;
   }
   .team-grid .testimonial-card.card-exit {
     opacity: 0;
-    transform: translateX(-80px);
+    transform: scale(0.93);
   }
   .team-dots {
     display: flex;
