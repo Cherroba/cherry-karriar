@@ -866,6 +866,12 @@ ul, ol {
   transform: translateY(0);
 }
 
+.jobs-cta-wrapper {
+  background: var(--cherry-bg);
+  padding: 40px 24px 60px;
+  text-align: center;
+}
+
 .jobs-cta {
   display: flex;
   gap: 16px;
@@ -1160,31 +1166,48 @@ ul, ol {
     min-width: 240px;
   }
 
-  /* Jobs: normal scrolling layout on mobile (no sticky) */
+  /* Jobs: sticky scroll with cards, CTA outside */
   .jobs-scroll-container {
-    height: auto !important;
+    height: 400vh;
   }
   .jobs-section {
-    position: relative !important;
-    height: auto !important;
-    overflow: visible !important;
-    padding: 60px 20px 40px !important;
-    display: block !important;
+    padding-top: max(10vh, 80px) !important;
+    justify-content: flex-start !important;
   }
   .jobs-preview {
-    display: grid !important;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
+    position: relative;
+    display: block;
+    height: 280px;
+    overflow: hidden;
+    margin: 0;
   }
-  .jobs-cta {
-    display: flex;
+  .jobs-preview .job-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transform: translateX(60px) scale(0.96);
+    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    pointer-events: none;
+  }
+  .jobs-preview .job-card.card-active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    pointer-events: auto;
+  }
+  .jobs-preview .job-card.card-exit {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.96);
+  }
+  .jobs-cta-wrapper .jobs-cta {
     flex-direction: column;
     align-items: center;
     gap: 12px;
   }
-  .jobs-cta .btn-primary,
-  .jobs-cta .btn-outline {
+  .jobs-cta-wrapper .jobs-cta .btn-primary,
+  .jobs-cta-wrapper .jobs-cta .btn-outline {
     width: 100%;
     max-width: 320px;
     text-align: center;

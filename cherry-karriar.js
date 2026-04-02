@@ -136,7 +136,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Mobile: jobs uses normal scroll layout (no sticky animation)
+  // --- Mobile: scroll-driven jobs cards ---
+  var jobsContainer = document.getElementById('jobsContainer');
+  var jobCards = document.querySelectorAll('.job-card[data-job]');
+  var currentJobCard = -1;
+
+  function updateJobCard(index) {
+    if (index === currentJobCard) return;
+    currentJobCard = index;
+
+    jobCards.forEach(function(card, i) {
+      card.classList.remove('card-active', 'card-exit');
+      if (index >= 0) {
+        if (i === index) {
+          card.classList.add('card-active');
+        } else if (i < index) {
+          card.classList.add('card-exit');
+        }
+      }
+    });
+  }
+
+  function onJobsScroll() {
+    if (!jobsContainer || window.innerWidth > 768) return;
+    var rect = jobsContainer.getBoundingClientRect();
+    var scrolled = -rect.top;
+    var range = jobsContainer.offsetHeight - window.innerHeight;
+    if (scrolled < 0) { updateJobCard(-1); return; }
+    if (scrolled > range) { return; }
+
+    var progress = scrolled / range;
+    var intro = 0.1;
+    var total = jobCards.length;
+
+    if (progress < intro) {
+      updateJobCard(-1);
+    } else {
+      var p = (progress - intro) / (1 - intro);
+      var idx = Math.min(Math.floor(p * total), total - 1);
+      updateJobCard(idx);
+    }
+  }
+
+  if (jobsContainer && jobCards.length > 0 && window.innerWidth <= 768) {
+    updateJobCard(-1);
+    window.addEventListener('scroll', onJobsScroll, { passive: true });
+    window.addEventListener('resize', function() {
+      if (window.innerWidth <= 768) {
+        onJobsScroll();
+      }
+    });
+  }
 
   // --- Video Lazy Load ---
   const videoWrapper = document.getElementById('videoWrapper');
