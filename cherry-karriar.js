@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Desktop: arc positions
     function arcPosition(index) {
       var cx = valuesScene.offsetWidth / 2;
-      var cy = valuesScene.offsetHeight * 0.55;
+      var cy = valuesScene.offsetHeight * 0.60;
       var rx = 260, ry = 260;
       var angleDeg = 180 - (180 * index / (TOTAL - 1));
       var rad = angleDeg * Math.PI / 180;
