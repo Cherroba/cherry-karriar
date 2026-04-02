@@ -770,7 +770,7 @@ ul, ol {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  overflow: visible;
+  overflow: hidden;
   padding-top: max(12vh, 90px);
   background:
     radial-gradient(ellipse at 50% 80%, rgba(255, 0, 89, 0.08), transparent 60%),
@@ -1115,6 +1115,7 @@ ul, ol {
     position: relative;
     display: block;
     height: 420px;
+    overflow: hidden;
   }
   .team-grid .testimonial-card {
     position: absolute;
@@ -1173,6 +1174,10 @@ ul, ol {
       height: 100svh;
     }
   }
+  .jobs-section .container {
+    width: 100%;
+    padding: 0 20px;
+  }
   .jobs-section .section-heading {
     font-size: 1.5rem;
     margin-bottom: 6px;
@@ -1185,7 +1190,9 @@ ul, ol {
   .jobs-preview {
     position: relative;
     display: block;
-    height: 190px;
+    height: 180px;
+    overflow: hidden;
+    margin: 0 0 8px 0;
   }
   .jobs-preview .job-card {
     position: absolute;
@@ -1222,14 +1229,17 @@ ul, ol {
   }
 
   .jobs-cta {
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;
     gap: 10px;
+    margin-top: 12px;
   }
   .jobs-cta .btn-primary,
   .jobs-cta .btn-outline {
-    padding: 12px 24px;
-    font-size: 0.9rem;
+    padding: 12px 18px;
+    font-size: 0.8rem;
+    flex: 1;
+    text-align: center;
   }
 
   .jobs-cta .btn-primary,
