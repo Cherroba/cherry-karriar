@@ -58,10 +58,15 @@
             <source src="cherry-video.mp4" type="video/mp4">
             Din webbläsare stöder inte videouppspelning.
           </video>
-          <video class="video-mobile" controls playsinline preload="none" poster="cherry-video-mobile-poster.jpg" style="width:100%;border-radius:var(--cherry-radius-lg);">
-            <source src="cherry-video-mobile.mp4" type="video/mp4">
-            Din webbläsare stöder inte videouppspelning.
-          </video>
+          <div class="video-mobile-wrap" onclick="this.querySelector('video').play();this.classList.add('playing');">
+            <img src="cherry-video-mobile-poster.jpg" alt="Video preview" class="video-mobile-poster">
+            <div class="video-mobile-play">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <video class="video-mobile" controls playsinline preload="none" style="width:100%;border-radius:var(--cherry-radius-lg);">
+              <source src="cherry-video-mobile.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
       </div>
     </section>

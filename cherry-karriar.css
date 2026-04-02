@@ -831,13 +831,50 @@ ul, ol {
 
 /* Responsive video: desktop vs mobile */
 .video-mobile { display: none !important; }
+.video-mobile-wrap { display: none !important; }
 .video-desktop { display: block; }
 
 @media (max-width: 768px) {
-  .video-mobile {
+  .video-mobile-wrap {
+    display: block !important;
+    position: relative;
+    cursor: pointer;
+  }
+  .video-mobile-poster {
+    width: 100%;
+    border-radius: var(--cherry-radius-lg);
+    display: block;
+  }
+  .video-mobile-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 72px;
+    height: 72px;
+    background: rgba(255, 0, 89, 0.85);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .video-mobile-play svg {
+    width: 32px;
+    height: 32px;
+    fill: #fff;
+    margin-left: 4px;
+  }
+  .video-mobile-wrap .video-mobile {
+    display: none !important;
+  }
+  .video-mobile-wrap.playing .video-mobile {
     display: block !important;
     width: 100%;
     height: auto;
+  }
+  .video-mobile-wrap.playing .video-mobile-poster,
+  .video-mobile-wrap.playing .video-mobile-play {
+    display: none !important;
   }
   .video-desktop { display: none !important; }
 
