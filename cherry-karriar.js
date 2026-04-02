@@ -91,6 +91,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
+  // --- Testimonial Card Swipe Dots (mobile) ---
+  const teamGrid = document.querySelector('.team-grid');
+  const teamDots = document.querySelectorAll('.team-dot');
+
+  if (teamGrid && teamDots.length > 0) {
+    teamGrid.addEventListener('scroll', function() {
+      var scrollLeft = teamGrid.scrollLeft;
+      var cardWidth = teamGrid.querySelector('.testimonial-card').offsetWidth + 16; // gap
+      var activeIndex = Math.round(scrollLeft / cardWidth);
+      teamDots.forEach(function(dot, i) {
+        dot.classList.toggle('active', i === activeIndex);
+      });
+    }, { passive: true });
+  }
+
   // --- Rainbow Arc Values Section ---
   const valuesContainer = document.getElementById('valuesContainer');
   const valuesScene = document.getElementById('valuesScene');

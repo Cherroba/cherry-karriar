@@ -520,6 +520,11 @@ ul, ol {
   font-weight: 600;
 }
 
+/* Dots hidden on desktop */
+.team-dots {
+  display: none;
+}
+
 /* --- Values / EVP Rainbow Arc Section --- */
 .values-scroll-container {
   height: 400vh;
@@ -1015,8 +1020,38 @@ ul, ol {
   }
 
   .team-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    padding-bottom: 16px;
+    scrollbar-width: none; /* Firefox */
+  }
+  .team-grid::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+  .team-grid .testimonial-card {
+    flex: 0 0 85%;
+    scroll-snap-align: center;
+    min-width: 0;
+  }
+  .team-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .team-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s ease;
+  }
+  .team-dot.active {
+    background: var(--cherry-pink);
+    transform: scale(1.3);
   }
 
   .value-card {
