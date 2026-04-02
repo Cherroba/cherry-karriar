@@ -99,6 +99,125 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // --- Desktop: scroll-driven jobs fade in/out ---
+  if (isDesktop) {
+    var jobsContainerDesktop = document.getElementById('jobsContainer');
+    var desktopJobCards = document.querySelectorAll('.job-card[data-job]');
+    var jobsCta = document.querySelector('.jobs-cta');
+
+    if (jobsContainerDesktop && desktopJobCards.length > 0) {
+      desktopJobCards.forEach(function(card) {
+        card.classList.add('jobs-fade');
+      });
+      if (jobsCta) jobsCta.classList.add('jobs-fade');
+
+      function onDesktopJobsScroll() {
+        var rect = jobsContainerDesktop.getBoundingClientRect();
+        var scrolled = -rect.top;
+        var range = jobsContainerDesktop.offsetHeight - window.innerHeight;
+
+        if (scrolled < 0 || scrolled > range) {
+          desktopJobCards.forEach(function(card) {
+            card.classList.remove('jobs-visible', 'jobs-exit');
+          });
+          if (jobsCta) jobsCta.classList.remove('jobs-visible', 'jobs-exit');
+          return;
+        }
+
+        var progress = scrolled / range;
+        if (progress < 0.3) {
+          desktopJobCards.forEach(function(card) {
+            card.classList.add('jobs-visible');
+            card.classList.remove('jobs-exit');
+          });
+          if (jobsCta) { jobsCta.classList.add('jobs-visible'); jobsCta.classList.remove('jobs-exit'); }
+        } else if (progress > 0.7) {
+          desktopJobCards.forEach(function(card) {
+            card.classList.remove('jobs-visible');
+            card.classList.add('jobs-exit');
+          });
+          if (jobsCta) { jobsCta.classList.remove('jobs-visible'); jobsCta.classList.add('jobs-exit'); }
+        } else {
+          desktopJobCards.forEach(function(card) {
+            card.classList.add('jobs-visible');
+            card.classList.remove('jobs-exit');
+          });
+          if (jobsCta) { jobsCta.classList.add('jobs-visible'); jobsCta.classList.remove('jobs-exit'); }
+        }
+      }
+
+      window.addEventListener('scroll', onDesktopJobsScroll, { passive: true });
+      onDesktopJobsScroll();
+    }
+  }
+
+  // --- Mobile: scroll-driven jobs cards ---
+  var jobsContainer = document.getElementById('jobsContainer');
+  var jobCards = document.querySelectorAll('.job-card[data-job]');
+  var jobsCtaMobile = document.querySelector('.jobs-cta');
+  var currentJobCard = -1;
+
+  function updateJobCard(index) {
+    if (index === currentJobCard) return;
+    currentJobCard = index;
+
+    jobCards.forEach(function(card, i) {
+      card.classList.remove('card-active', 'card-exit');
+      if (index >= 0) {
+        if (i === index) {
+          card.classList.add('card-active');
+        } else if (i < index) {
+          card.classList.add('card-exit');
+        }
+      }
+    });
+
+    // Show CTA when last card is active
+    if (jobsCtaMobile) {
+      if (index >= 0) {
+        jobsCtaMobile.style.opacity = '1';
+        jobsCtaMobile.style.transform = 'translateY(0)';
+      } else {
+        jobsCtaMobile.style.opacity = '0';
+        jobsCtaMobile.style.transform = 'translateY(20px)';
+      }
+    }
+  }
+
+  function onJobsScroll() {
+    if (!jobsContainer || window.innerWidth > 768) return;
+    var rect = jobsContainer.getBoundingClientRect();
+    var scrolled = -rect.top;
+    var range = jobsContainer.offsetHeight - window.innerHeight;
+    if (scrolled < 0) { updateJobCard(-1); return; }
+    if (scrolled > range) return;
+
+    var progress = scrolled / range;
+    var intro = 0.1;
+    var outro = 0.2;
+    var total = jobCards.length;
+
+    if (progress < intro) {
+      updateJobCard(-1);
+    } else if (progress > (1 - outro)) {
+      updateJobCard(-1);
+    } else {
+      var p = (progress - intro) / (1 - intro - outro);
+      var idx = Math.min(Math.floor(p * total), total - 1);
+      updateJobCard(idx);
+    }
+  }
+
+  if (jobsContainer && jobCards.length > 0 && window.innerWidth <= 768) {
+    updateJobCard(-1);
+    window.addEventListener('scroll', onJobsScroll, { passive: true });
+    window.addEventListener('resize', function() {
+      if (window.innerWidth <= 768) {
+        onJobsScroll();
+      }
+    });
+  }
+
   // --- Video Lazy Load ---
   const videoWrapper = document.getElementById('videoWrapper');
 

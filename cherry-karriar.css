@@ -757,8 +757,21 @@ ul, ol {
 }
 
 /* --- Jobs Section --- */
+.jobs-scroll-container {
+  height: 250vh;
+  position: relative;
+}
+
 .jobs-section {
-  padding: var(--cherry-section-padding);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  padding-top: max(12vh, 90px);
   background:
     radial-gradient(ellipse at 50% 80%, rgba(255, 0, 89, 0.08), transparent 60%),
     var(--cherry-bg);
@@ -824,6 +837,48 @@ ul, ol {
 
 .job-card-link::after {
   content: '\2192';
+}
+
+/* Desktop scroll-driven fade for job cards */
+.job-card.jobs-fade {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.job-card[data-job="1"].jobs-fade {
+  transition-delay: 0.15s;
+}
+.job-card[data-job="2"].jobs-fade {
+  transition-delay: 0.3s;
+}
+.job-card.jobs-fade.jobs-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.job-card.jobs-fade.jobs-exit {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.job-card[data-job="1"].jobs-fade.jobs-exit {
+  transition-delay: 0.1s;
+}
+.job-card[data-job="2"].jobs-fade.jobs-exit {
+  transition-delay: 0.2s;
+}
+
+/* CTA buttons also fade with cards */
+.jobs-cta.jobs-fade {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease 0.35s, transform 0.7s ease 0.35s;
+}
+.jobs-cta.jobs-fade.jobs-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.jobs-cta.jobs-fade.jobs-exit {
+  opacity: 0;
+  transform: translateY(-20px);
 }
 
 .jobs-cta {
@@ -1119,8 +1174,37 @@ ul, ol {
     min-width: 240px;
   }
 
+  .jobs-scroll-container {
+    height: 400vh;
+  }
+  .jobs-section {
+    padding-top: max(10vh, 90px) !important;
+    justify-content: flex-start !important;
+  }
   .jobs-preview {
-    grid-template-columns: 1fr;
+    position: relative;
+    display: block;
+    height: 300px;
+  }
+  .jobs-preview .job-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transform: translateX(60px) scale(0.96);
+    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    pointer-events: none;
+  }
+  .jobs-preview .job-card.card-active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    pointer-events: auto;
+  }
+  .jobs-preview .job-card.card-exit {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.96);
   }
 
   .jobs-cta {
