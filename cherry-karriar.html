@@ -127,56 +127,41 @@
       </div>
     </section>
 
-    <!-- ===== VALUES / EVP ===== -->
-    <section class="values-section" id="values">
-      <div class="container">
-        <h2 class="section-heading animate-on-scroll">Varför Cherry?</h2>
-        <p class="section-subtext animate-on-scroll">Vi tror på människor som vill utvecklas, vara en del av ett team och bjuda på sig själva.</p>
-        <div class="values-grid">
+    <!-- ===== VALUES / EVP (Rainbow Arc) ===== -->
+    <div class="values-scroll-container" id="valuesContainer">
+      <div class="values-sticky">
 
-          <div class="value-card animate-on-scroll">
-            <div class="value-image">
-              <img src="image 32 (1).png" alt="Cherry mascot" style="height:80px;object-fit:contain;">
-            </div>
-            <h3>Från ny → pro</h3>
-            <p>Lär dig snabbt. Väx ännu snabbare.<br>Vi ger dig verktygen – du sätter takten.</p>
-          </div>
-
-          <div class="value-card animate-on-scroll">
-            <div class="value-image">
-              <span class="value-icon">&#127881;</span>
-            </div>
-            <h3>Jobba. Ha kul. Repeat.</h3>
-            <p>Ett team som backar dig.<br>Bra vibes. Högt tempo. Alltid tillsammans.</p>
-          </div>
-
-          <div class="value-card animate-on-scroll">
-            <div class="value-image">
-              <span class="value-icon">&#127759;</span>
-            </div>
-            <h3>Många möjligheter</h3>
-            <p>Olika städer. Olika pass.<br>Flexibilitet när livet kräver det.</p>
-          </div>
-
-          <div class="value-card animate-on-scroll">
-            <div class="value-image">
-              <span class="value-icon">&#128154;</span>
-            </div>
-            <h3>100% tryggt</h3>
-            <p>Schyssta villkor. Rätt lön.<br>Inga konstigheter – bara trygghet.</p>
-          </div>
-
-          <div class="value-card animate-on-scroll">
-            <div class="value-image">
-              <span class="value-icon">&#10024;</span>
-            </div>
-            <h3>Aldrig en tråkig kväll</h3>
-            <p>Nya människor. Nya platser.<br>Du är mitt i allt som händer.</p>
-          </div>
-
+        <div class="values-heading">
+          <h2>Varför Cherry?</h2>
+          <p>Vi tror på människor som vill utvecklas, vara en del av ett team och bjuda på sig själva.</p>
         </div>
+
+        <div class="values-scene" id="valuesScene">
+          <div class="arc-path" id="arcPath"></div>
+
+          <div class="arc-node" data-index="0"><span>&#127826;</span></div>
+          <div class="arc-node" data-index="1"><span>&#127881;</span></div>
+          <div class="arc-node" data-index="2"><span>&#127759;</span></div>
+          <div class="arc-node" data-index="3"><span>&#128154;</span></div>
+          <div class="arc-node" data-index="4"><span>&#10024;</span></div>
+
+          <div class="center-text" id="centerText">
+            <h3 id="centerTitle"></h3>
+            <p id="centerDesc"></p>
+          </div>
+        </div>
+
+        <div class="scroll-dots" id="scrollDots">
+          <div class="scroll-dot"></div>
+          <div class="scroll-dot"></div>
+          <div class="scroll-dot"></div>
+          <div class="scroll-dot"></div>
+          <div class="scroll-dot"></div>
+        </div>
+
+        <div class="scroll-hint" id="scrollHint">Scrolla för att utforska</div>
       </div>
-    </section>
+    </div>
 
     <!-- ===== JOBS ===== -->
     <section class="jobs-section" id="jobs">
