@@ -833,6 +833,13 @@ ul, ol {
   fill: #fff;
 }
 
+.tiktok-feed {
+  margin-top: 40px;
+  max-width: var(--cherry-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* --- Footer --- */
 .site-footer {
   background: var(--cherry-bg-dark);
