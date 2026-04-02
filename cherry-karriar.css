@@ -446,6 +446,17 @@ ul, ol {
   transition: transform var(--cherry-transition), box-shadow var(--cherry-transition);
 }
 
+/* Staggered fade-in on desktop */
+.testimonial-card.animate-on-scroll {
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.testimonial-card[data-card="1"].animate-on-scroll {
+  transition-delay: 0.15s;
+}
+.testimonial-card[data-card="2"].animate-on-scroll {
+  transition-delay: 0.3s;
+}
+
 .testimonial-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
