@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Desktop: scroll-driven jobs fade in/out ---
+  // --- Desktop: scroll-driven jobs fade in (no fade out — buttons must stay clickable) ---
   if (isDesktop) {
     var jobsContainerDesktop = document.getElementById('jobsContainer');
     var desktopJobCards = document.querySelectorAll('.job-card[data-job]');
@@ -116,34 +116,19 @@ document.addEventListener('DOMContentLoaded', () => {
         var scrolled = -rect.top;
         var range = jobsContainerDesktop.offsetHeight - window.innerHeight;
 
-        if (scrolled < 0 || scrolled > range) {
+        if (scrolled < 0) {
           desktopJobCards.forEach(function(card) {
-            card.classList.remove('jobs-visible', 'jobs-exit');
+            card.classList.remove('jobs-visible');
           });
-          if (jobsCta) jobsCta.classList.remove('jobs-visible', 'jobs-exit');
+          if (jobsCta) jobsCta.classList.remove('jobs-visible');
           return;
         }
 
-        var progress = scrolled / range;
-        if (progress < 0.3) {
-          desktopJobCards.forEach(function(card) {
-            card.classList.add('jobs-visible');
-            card.classList.remove('jobs-exit');
-          });
-          if (jobsCta) { jobsCta.classList.add('jobs-visible'); jobsCta.classList.remove('jobs-exit'); }
-        } else if (progress > 0.7) {
-          desktopJobCards.forEach(function(card) {
-            card.classList.remove('jobs-visible');
-            card.classList.add('jobs-exit');
-          });
-          if (jobsCta) { jobsCta.classList.remove('jobs-visible'); jobsCta.classList.add('jobs-exit'); }
-        } else {
-          desktopJobCards.forEach(function(card) {
-            card.classList.add('jobs-visible');
-            card.classList.remove('jobs-exit');
-          });
-          if (jobsCta) { jobsCta.classList.add('jobs-visible'); jobsCta.classList.remove('jobs-exit'); }
-        }
+        // Fade in and stay visible
+        desktopJobCards.forEach(function(card) {
+          card.classList.add('jobs-visible');
+        });
+        if (jobsCta) jobsCta.classList.add('jobs-visible');
       }
 
       window.addEventListener('scroll', onDesktopJobsScroll, { passive: true });
@@ -199,10 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (progress < intro) {
       updateJobCard(-1);
-    } else if (progress > (1 - outro)) {
-      updateJobCard(-1);
     } else {
-      var p = (progress - intro) / (1 - intro - outro);
+      // No outro fade-out — last card stays visible so buttons are clickable
+      var p = (progress - intro) / (1 - intro);
       var idx = Math.min(Math.floor(p * total), total - 1);
       updateJobCard(idx);
     }

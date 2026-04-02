@@ -758,7 +758,7 @@ ul, ol {
 
 /* --- Jobs Section --- */
 .jobs-scroll-container {
-  height: 250vh;
+  height: 200vh;
   position: relative;
 }
 
@@ -855,17 +855,6 @@ ul, ol {
   opacity: 1;
   transform: translateY(0);
 }
-.job-card.jobs-fade.jobs-exit {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-.job-card[data-job="1"].jobs-fade.jobs-exit {
-  transition-delay: 0.1s;
-}
-.job-card[data-job="2"].jobs-fade.jobs-exit {
-  transition-delay: 0.2s;
-}
-
 /* CTA buttons also fade with cards */
 .jobs-cta.jobs-fade {
   opacity: 0;
@@ -875,10 +864,6 @@ ul, ol {
 .jobs-cta.jobs-fade.jobs-visible {
   opacity: 1;
   transform: translateY(0);
-}
-.jobs-cta.jobs-fade.jobs-exit {
-  opacity: 0;
-  transform: translateY(-20px);
 }
 
 .jobs-cta {
@@ -1175,7 +1160,7 @@ ul, ol {
   }
 
   .jobs-scroll-container {
-    height: 400vh;
+    height: 300vh;
   }
   .jobs-section {
     padding-top: max(10vh, 90px) !important;
