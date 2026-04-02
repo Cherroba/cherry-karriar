@@ -835,6 +835,10 @@ ul, ol {
 .video-desktop { display: block; }
 
 @media (max-width: 768px) {
+  .video-wrapper {
+    aspect-ratio: auto;
+    overflow: visible;
+  }
   .video-mobile-wrap {
     display: block !important;
     position: relative;
