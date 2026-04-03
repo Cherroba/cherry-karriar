@@ -729,7 +729,7 @@ ul, ol {
 
 /* Values mobile overrides */
 @media (max-width: 768px) {
-  .values-scroll-container { height: 350vh; }
+  .values-scroll-container { height: 450vh; }
   .values-heading { margin-top: 10vh; }
   .values-heading p { font-size: 0.9rem; }
   .arc-path { display: none; }
@@ -1198,7 +1198,7 @@ ul, ol {
     font-size: 0.9rem;
   }
   .jobs-scroll-container {
-    height: 130svh;
+    height: 250svh;
   }
   .jobs-section {
     height: 100svh;
