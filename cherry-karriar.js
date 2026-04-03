@@ -75,13 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         var progress = scrolled / range; // 0 to 1
-        // 0–0.3: fade in, 0.3–0.7: hold, 0.7–1.0: fade out
+        // 0–0.3: fade in, 0.3–0.85: hold, 0.85–1.0: fade out
         if (progress < 0.3) {
           desktopCards.forEach(function(card) {
             card.classList.add('team-visible');
             card.classList.remove('team-exit');
           });
-        } else if (progress > 0.7) {
+        } else if (progress > 0.85) {
           desktopCards.forEach(function(card) {
             card.classList.remove('team-visible');
             card.classList.add('team-exit');
