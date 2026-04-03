@@ -866,10 +866,15 @@ ul, ol {
   transform: translateY(0);
 }
 
+/* Desktop: show inline CTA, hide mobile CTA wrapper */
+.jobs-cta-mobile {
+  display: none;
+}
+.jobs-cta-desktop {
+  display: flex;
+}
 .jobs-cta-wrapper {
-  background: var(--cherry-bg);
-  padding: 24px 24px 48px;
-  text-align: center;
+  display: none;
 }
 
 .jobs-cta {
@@ -1166,7 +1171,19 @@ ul, ol {
     min-width: 240px;
   }
 
-  /* Jobs: sticky scroll with cards, CTA outside */
+  /* Jobs: sticky scroll with cards, CTA outside on mobile */
+  .jobs-cta-desktop {
+    display: none !important;
+  }
+  .jobs-cta-wrapper {
+    display: block !important;
+    background: var(--cherry-bg);
+    padding: 24px 24px 48px;
+    text-align: center;
+  }
+  .jobs-cta-mobile {
+    display: flex !important;
+  }
   .jobs-scroll-container {
     height: 250vh;
   }
