@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (progress < intro) {
       updateTeamCard(-1);
     } else if (progress > (1 - outro)) {
-      updateTeamCard(-1);
+      updateTeamCard(total);
     } else {
       var p = (progress - intro) / (1 - intro - outro);
       var idx = Math.min(Math.floor(p * total), total - 1);
