@@ -1171,30 +1171,45 @@ ul, ol {
     min-width: 240px;
   }
 
-  /* Jobs: sticky scroll with cards, CTA outside on mobile */
-  .jobs-cta-desktop {
+  /* Jobs: sticky scroll with cards, CTA inside sticky on mobile */
+  .jobs-cta-wrapper {
     display: none !important;
   }
-  .jobs-cta-wrapper {
-    display: block !important;
-    background: var(--cherry-bg);
-    padding: 24px 24px 48px;
-    text-align: center;
-  }
   .jobs-cta-mobile {
+    display: none !important;
+  }
+  .jobs-cta-desktop {
     display: flex !important;
+    position: absolute;
+    bottom: max(3vh, 20px);
+    left: 24px;
+    right: 24px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 2;
+  }
+  .jobs-cta-desktop .btn-primary,
+  .jobs-cta-desktop .btn-outline {
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    padding: 12px 24px;
+    font-size: 0.9rem;
   }
   .jobs-scroll-container {
-    height: 130vh;
+    height: 130svh;
   }
   .jobs-section {
-    padding-top: max(10vh, 80px) !important;
+    height: 100svh;
+    padding-top: max(8vh, 70px) !important;
     justify-content: flex-start !important;
+    position: relative;
   }
   .jobs-preview {
     position: relative;
     display: block;
-    height: 280px;
+    height: 240px;
     overflow: hidden;
     margin: 0;
   }
@@ -1217,17 +1232,6 @@ ul, ol {
   .jobs-preview .job-card.card-exit {
     opacity: 0;
     transform: translateX(-60px) scale(0.96);
-  }
-  .jobs-cta-wrapper .jobs-cta {
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
-  .jobs-cta-wrapper .jobs-cta .btn-primary,
-  .jobs-cta-wrapper .jobs-cta .btn-outline {
-    width: 100%;
-    max-width: 320px;
-    text-align: center;
   }
 
   .footer-nav {
