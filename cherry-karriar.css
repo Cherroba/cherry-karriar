@@ -868,7 +868,7 @@ ul, ol {
 
 .jobs-cta-wrapper {
   background: var(--cherry-bg);
-  padding: 40px 24px 60px;
+  padding: 24px 24px 48px;
   text-align: center;
 }
 
@@ -1168,7 +1168,7 @@ ul, ol {
 
   /* Jobs: sticky scroll with cards, CTA outside */
   .jobs-scroll-container {
-    height: 400vh;
+    height: 250vh;
   }
   .jobs-section {
     padding-top: max(10vh, 80px) !important;
