@@ -1185,7 +1185,7 @@ ul, ol {
     display: flex !important;
   }
   .jobs-scroll-container {
-    height: 250vh;
+    height: 130vh;
   }
   .jobs-section {
     padding-top: max(10vh, 80px) !important;
