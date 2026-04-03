@@ -743,9 +743,11 @@ ul, ol {
     width: 44px;
     height: 44px;
     font-size: 1.2rem;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
   }
   .arc-node.active {
-    transform: scale(1.6);
+    transform: scale(1.6) translateZ(0);
   }
   .center-text {
     bottom: auto;
@@ -1134,19 +1136,21 @@ ul, ol {
     left: 0;
     right: 0;
     opacity: 0;
-    transform: translateX(60px) scale(0.96);
+    transform: translate3d(60px, 0, 0);
     transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
                 transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     pointer-events: none;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
   }
   .team-grid .testimonial-card.card-active {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translate3d(0, 0, 0);
     pointer-events: auto;
   }
   .team-grid .testimonial-card.card-exit {
     opacity: 0;
-    transform: translateX(-60px) scale(0.96);
+    transform: translate3d(-60px, 0, 0);
   }
   .team-dots {
     display: flex;
@@ -1181,7 +1185,7 @@ ul, ol {
   .jobs-cta-desktop {
     display: flex !important;
     position: absolute;
-    bottom: max(3vh, 20px);
+    bottom: max(5vh, 40px);
     left: 24px;
     right: 24px;
     flex-direction: column;
@@ -1218,19 +1222,21 @@ ul, ol {
     left: 0;
     right: 0;
     opacity: 0;
-    transform: translateX(60px) scale(0.96);
+    transform: translate3d(60px, 0, 0);
     transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
                 transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     pointer-events: none;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
   }
   .jobs-preview .job-card.card-active {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translate3d(0, 0, 0);
     pointer-events: auto;
   }
   .jobs-preview .job-card.card-exit {
     opacity: 0;
-    transform: translateX(-60px) scale(0.96);
+    transform: translate3d(-60px, 0, 0);
   }
 
   .footer-nav {
