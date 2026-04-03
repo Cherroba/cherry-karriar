@@ -1204,7 +1204,6 @@ ul, ol {
     height: 100svh;
     padding-top: max(8vh, 70px) !important;
     justify-content: flex-start !important;
-    position: relative;
   }
   .jobs-preview {
     position: relative;
