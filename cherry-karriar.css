@@ -362,12 +362,99 @@ ul, ol {
   padding: 16px 40px;
 }
 
-/* --- Video Section --- */
+/* --- Video Section (Sticky) --- */
+.video-scroll-container {
+  height: 200vh;
+  position: relative;
+}
+
 .video-section {
-  padding: var(--cherry-section-padding);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  padding-top: max(12vh, 90px);
   background:
     radial-gradient(ellipse at 50% 50%, rgba(80, 0, 100, 0.2), transparent 70%),
     var(--cherry-bg);
+}
+
+/* Desktop scroll-driven fade for video */
+.video-section .section-heading,
+.video-section .section-subtext,
+.video-section .video-wrapper {
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.video-section.video-fade .section-heading,
+.video-section.video-fade .section-subtext,
+.video-section.video-fade .video-wrapper {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.video-section.video-fade.video-visible .section-heading,
+.video-section.video-fade.video-visible .section-subtext,
+.video-section.video-fade.video-visible .video-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+}
+.video-section.video-fade .section-subtext {
+  transition-delay: 0.1s;
+}
+.video-section.video-fade .video-wrapper {
+  transition-delay: 0.2s;
+}
+.video-section.video-fade.video-exit .section-heading,
+.video-section.video-fade.video-exit .section-subtext,
+.video-section.video-fade.video-exit .video-wrapper {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* --- Social Section (Sticky) --- */
+.social-scroll-container {
+  height: 200vh;
+  position: relative;
+}
+
+.social-section {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  padding-top: max(12vh, 90px);
+  background: var(--cherry-bg);
+}
+
+/* Desktop scroll-driven fade for social */
+.social-section.social-fade .social-icons,
+.social-section.social-fade h3,
+.social-section.social-fade .tiktok-feed {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.social-section.social-fade h3 {
+  transition-delay: 0s;
+}
+.social-section.social-fade .social-icons {
+  transition-delay: 0.15s;
+}
+.social-section.social-fade .tiktok-feed {
+  transition-delay: 0.3s;
+}
+.social-section.social-fade.social-visible .social-icons,
+.social-section.social-fade.social-visible h3,
+.social-section.social-fade.social-visible .tiktok-feed {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .video-wrapper {
@@ -894,9 +981,7 @@ ul, ol {
 
 /* --- Social Section --- */
 .social-section {
-  padding: 60px 24px;
   text-align: center;
-  background: var(--cherry-bg);
 }
 
 .social-section h3 {
@@ -1245,6 +1330,33 @@ ul, ol {
     transform: translate3d(-60px, 0, 0);
   }
 
+  /* Video: sticky on mobile */
+  .video-scroll-container {
+    height: 200svh;
+  }
+  .video-section {
+    height: 100svh;
+    padding-top: max(8vh, 70px) !important;
+    justify-content: flex-start !important;
+  }
+  .video-section .container {
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  /* Social: sticky on mobile */
+  .social-scroll-container {
+    height: 200svh;
+  }
+  .social-section {
+    height: 100svh;
+    padding-top: max(10vh, 80px) !important;
+    justify-content: flex-start !important;
+  }
+  .social-icons {
+    gap: 16px;
+  }
+
   .footer-nav {
     flex-direction: column;
     align-items: center;
@@ -1286,9 +1398,5 @@ ul, ol {
 
   .value-card {
     flex: 0 0 calc(80% - 12px);
-  }
-
-  .social-icons {
-    gap: 16px;
   }
 }

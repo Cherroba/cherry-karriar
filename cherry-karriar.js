@@ -188,16 +188,124 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Video Lazy Load ---
-  const videoWrapper = document.getElementById('videoWrapper');
+  // --- Desktop: scroll-driven video fade in/out ---
+  if (isDesktop) {
+    var videoContainerDesktop = document.getElementById('videoContainer');
+    var videoSection = document.querySelector('.video-section');
 
-  if (videoWrapper) {
-    videoWrapper.addEventListener('click', () => {
-      const videoUrl = videoWrapper.getAttribute('data-video-url');
-      if (videoUrl) {
-        videoWrapper.innerHTML = `<iframe src="${videoUrl}?autoplay=1&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    if (videoContainerDesktop && videoSection) {
+      videoSection.classList.add('video-fade');
+
+      function onDesktopVideoScroll() {
+        var rect = videoContainerDesktop.getBoundingClientRect();
+        var scrolled = -rect.top;
+        var range = videoContainerDesktop.offsetHeight - window.innerHeight;
+
+        if (scrolled < 0 || scrolled > range) {
+          videoSection.classList.remove('video-visible', 'video-exit');
+          return;
+        }
+
+        var progress = scrolled / range;
+        if (progress < 0.2) {
+          videoSection.classList.add('video-visible');
+          videoSection.classList.remove('video-exit');
+        } else if (progress > 0.85) {
+          videoSection.classList.remove('video-visible');
+          videoSection.classList.add('video-exit');
+        } else {
+          videoSection.classList.add('video-visible');
+          videoSection.classList.remove('video-exit');
+        }
       }
-    });
+
+      window.addEventListener('scroll', onDesktopVideoScroll, { passive: true });
+      onDesktopVideoScroll();
+    }
+  }
+
+  // --- Desktop: scroll-driven social fade in (no fade out — last section) ---
+  if (isDesktop) {
+    var socialContainerDesktop = document.getElementById('socialContainer');
+    var socialSection = document.querySelector('.social-section');
+
+    if (socialContainerDesktop && socialSection) {
+      socialSection.classList.add('social-fade');
+
+      function onDesktopSocialScroll() {
+        var rect = socialContainerDesktop.getBoundingClientRect();
+        var scrolled = -rect.top;
+
+        if (scrolled < 0) {
+          socialSection.classList.remove('social-visible');
+          return;
+        }
+
+        socialSection.classList.add('social-visible');
+      }
+
+      window.addEventListener('scroll', onDesktopSocialScroll, { passive: true });
+      onDesktopSocialScroll();
+    }
+  }
+
+  // --- Mobile: scroll-driven video fade in/out ---
+  var videoContainerMobile = document.getElementById('videoContainer');
+  var videoSectionMobile = document.querySelector('.video-section');
+
+  if (videoContainerMobile && videoSectionMobile && window.innerWidth <= 768) {
+    videoSectionMobile.classList.add('video-fade');
+
+    function onMobileVideoScroll() {
+      if (window.innerWidth > 768) return;
+      var rect = videoContainerMobile.getBoundingClientRect();
+      var scrolled = -rect.top;
+      var range = videoContainerMobile.offsetHeight - window.innerHeight;
+
+      if (scrolled < 0 || scrolled > range) {
+        videoSectionMobile.classList.remove('video-visible', 'video-exit');
+        return;
+      }
+
+      var progress = scrolled / range;
+      if (progress < 0.15) {
+        videoSectionMobile.classList.add('video-visible');
+        videoSectionMobile.classList.remove('video-exit');
+      } else if (progress > 0.85) {
+        videoSectionMobile.classList.remove('video-visible');
+        videoSectionMobile.classList.add('video-exit');
+      } else {
+        videoSectionMobile.classList.add('video-visible');
+        videoSectionMobile.classList.remove('video-exit');
+      }
+    }
+
+    window.addEventListener('scroll', onMobileVideoScroll, { passive: true });
+    onMobileVideoScroll();
+  }
+
+  // --- Mobile: scroll-driven social fade in ---
+  var socialContainerMobile = document.getElementById('socialContainer');
+  var socialSectionMobile = document.querySelector('.social-section');
+
+  if (socialContainerMobile && socialSectionMobile && window.innerWidth <= 768) {
+    socialSectionMobile.classList.add('social-fade');
+
+    function onMobileSocialScroll() {
+      if (window.innerWidth > 768) return;
+      var rect = socialContainerMobile.getBoundingClientRect();
+      var scrolled = -rect.top;
+
+      if (scrolled < 0) {
+        socialSectionMobile.classList.remove('social-visible');
+        return;
+      }
+
+      socialSectionMobile.classList.add('social-visible');
+    }
+
+    window.addEventListener('scroll', onMobileSocialScroll, { passive: true });
+    onMobileSocialScroll();
   }
 
   // --- Smooth Scroll for Anchor Links ---
