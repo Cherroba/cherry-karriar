@@ -1354,11 +1354,6 @@ ul, ol {
     width: 100%;
     padding: 0 20px;
   }
-  .video-section .video-wrapper {
-    max-height: 55svh;
-    overflow: hidden;
-    border-radius: var(--cherry-radius-lg);
-  }
 
   /* Social: sticky on mobile */
   .social-scroll-container {
