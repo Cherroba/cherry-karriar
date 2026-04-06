@@ -286,40 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Mobile: video opens in native fullscreen on play ---
-  var videoMobileWrap = document.getElementById('videoMobileWrap');
-  var videoMobile = document.getElementById('videoMobile');
-
-  if (videoMobileWrap && videoMobile && window.innerWidth <= 768) {
-    videoMobileWrap.addEventListener('click', function() {
-      videoMobile.style.display = 'block';
-      videoMobile.play();
-
-      // Try native fullscreen (Android Chrome)
-      if (videoMobile.requestFullscreen) {
-        videoMobile.requestFullscreen().catch(function() {});
-      } else if (videoMobile.webkitEnterFullscreen) {
-        // iOS Safari native fullscreen
-        videoMobile.webkitEnterFullscreen();
-      }
-
-      // When exiting fullscreen, show poster again if paused
-      function onFullscreenExit() {
-        if (!document.fullscreenElement && !videoMobile.webkitDisplayingFullscreen) {
-          if (videoMobile.paused || videoMobile.ended) {
-            videoMobile.style.display = 'none';
-            videoMobileWrap.classList.remove('playing');
-          } else {
-            // Video still playing — show inline
-            videoMobileWrap.classList.add('playing');
-          }
-        }
-      }
-
-      document.addEventListener('fullscreenchange', onFullscreenExit);
-      videoMobile.addEventListener('webkitendfullscreen', onFullscreenExit);
-    });
-  }
 
   // --- Mobile: scroll-driven social fade in ---
   var socialContainerMobile = document.getElementById('socialContainer');
