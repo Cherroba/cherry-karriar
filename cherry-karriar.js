@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Scroll indicators: hide when section is being scrolled ---
+  // --- Scroll indicators: show when section is in view, hide after progress ---
   var scrollIndicators = document.querySelectorAll('.scroll-indicator');
   if (scrollIndicators.length > 0) {
     function onIndicatorScroll() {
@@ -108,12 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         var rect = container.getBoundingClientRect();
         var scrolled = -rect.top;
+        var range = container.offsetHeight - window.innerHeight;
 
-        // Hide indicator once user starts scrolling within the section
-        if (scrolled > 80) {
-          indicator.classList.add('hidden');
-        } else {
+        // Show when section is on screen and in first 15% of scroll range
+        if (scrolled >= -10 && scrolled < range * 0.15) {
           indicator.classList.remove('hidden');
+        } else {
+          indicator.classList.add('hidden');
         }
       });
     }
