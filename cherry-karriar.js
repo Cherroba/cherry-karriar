@@ -41,6 +41,42 @@ document.addEventListener('DOMContentLoaded', () => {
     onHeroScroll();
   }
 
+  // --- Staggered text fade-in for all sections ---
+  // Targets: values heading, video heading/subtext, team heading/subtext, jobs heading/subtext
+  var fadeSections = [
+    { container: '#valuesContainer', selectors: ['.values-heading h2', '.values-heading p'] },
+    { container: '#videoContainer', selectors: ['.video-section .section-heading', '.video-section .section-subtext', '.video-section .video-wrapper'] },
+    { container: '#teamContainer', selectors: ['.team-section .section-heading', '.team-section .section-subtext'] },
+    { container: '#jobsContainer', selectors: ['.jobs-section .section-heading', '.jobs-section .section-subtext'] },
+    { container: '#socialContainer', selectors: ['.social-section h3'] }
+  ];
+
+  fadeSections.forEach(function(cfg) {
+    var container = document.querySelector(cfg.container);
+    if (!container) return;
+
+    cfg.selectors.forEach(function(sel, i) {
+      var el = document.querySelector(sel);
+      if (!el) return;
+      el.classList.add('section-text-fade');
+      el.setAttribute('data-fade-delay', String(i));
+    });
+  });
+
+  // Single scroll handler for all section text fades
+  function onSectionTextScroll() {
+    var fadeEls = document.querySelectorAll('.section-text-fade');
+    fadeEls.forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.85) {
+        el.classList.add('fade-visible');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', onSectionTextScroll, { passive: true });
+  onSectionTextScroll();
+
   // --- Mobile Navigation Toggle ---
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileNav = document.getElementById('mobileNav');
