@@ -77,6 +77,50 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', onSectionTextScroll, { passive: true });
   onSectionTextScroll();
 
+  // --- Back to top button ---
+  var backToTopBtn = document.getElementById('backToTop');
+  if (backToTopBtn) {
+    function onBackToTopScroll() {
+      // Show after scrolling past hero
+      if (window.scrollY > window.innerHeight) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    }
+    window.addEventListener('scroll', onBackToTopScroll, { passive: true });
+    onBackToTopScroll();
+
+    backToTopBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // --- Scroll indicators: hide when section is being scrolled ---
+  var scrollIndicators = document.querySelectorAll('.scroll-indicator');
+  if (scrollIndicators.length > 0) {
+    function onIndicatorScroll() {
+      scrollIndicators.forEach(function(indicator) {
+        var section = indicator.closest('section');
+        if (!section) return;
+        var container = section.parentElement;
+        if (!container) return;
+
+        var rect = container.getBoundingClientRect();
+        var scrolled = -rect.top;
+
+        // Hide indicator once user starts scrolling within the section
+        if (scrolled > 80) {
+          indicator.classList.add('hidden');
+        } else {
+          indicator.classList.remove('hidden');
+        }
+      });
+    }
+    window.addEventListener('scroll', onIndicatorScroll, { passive: true });
+    onIndicatorScroll();
+  }
+
   // --- Mobile Navigation Toggle ---
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileNav = document.getElementById('mobileNav');

@@ -203,6 +203,79 @@ ul, ol {
 .section-text-fade[data-fade-delay="2"] { transition-delay: 0.24s; }
 .section-text-fade[data-fade-delay="3"] { transition-delay: 0.36s; }
 
+/* --- Scroll indicator arrow --- */
+.scroll-indicator {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+.scroll-indicator.hidden {
+  opacity: 0;
+}
+.scroll-indicator svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(8px); opacity: 0.9; }
+}
+
+/* --- Back to top button --- */
+.back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 44px;
+  height: 44px;
+  background: var(--cherry-pink);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(255, 0, 89, 0.3);
+}
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.back-to-top:hover {
+  background: var(--cherry-pink-hover);
+  transform: translateY(-2px);
+}
+.back-to-top svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 /* --- Header --- */
 .site-header {
   position: fixed;
@@ -876,7 +949,7 @@ ul, ol {
 
 /* --- Jobs Section --- */
 .jobs-scroll-container {
-  height: 200vh;
+  height: 250vh;
   position: relative;
 }
 
@@ -1318,7 +1391,7 @@ ul, ol {
     font-size: 0.9rem;
   }
   .jobs-scroll-container {
-    height: 250svh;
+    height: 400svh;
   }
   .jobs-section {
     height: 100svh;
