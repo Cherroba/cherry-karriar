@@ -639,6 +639,12 @@ ul, ol {
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid rgba(255, 255, 255, 0.1);
 }
+.arc-node-img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  border-radius: 50%;
+}
 
 .arc-node.active {
   background: rgba(255, 0, 89, 0.15);
