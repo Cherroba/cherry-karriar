@@ -286,39 +286,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Mobile: scroll-driven video fade in/out ---
-  var videoContainerMobile = document.getElementById('videoContainer');
-  var videoSectionMobile = document.querySelector('.video-section');
+  // --- Mobile: video opens in native fullscreen on play ---
+  var videoMobileWrap = document.getElementById('videoMobileWrap');
+  var videoMobile = document.getElementById('videoMobile');
 
-  if (videoContainerMobile && videoSectionMobile && window.innerWidth <= 768) {
-    videoSectionMobile.classList.add('video-fade');
+  if (videoMobileWrap && videoMobile && window.innerWidth <= 768) {
+    videoMobileWrap.addEventListener('click', function() {
+      videoMobile.style.display = 'block';
+      videoMobile.play();
 
-    function onMobileVideoScroll() {
-      if (window.innerWidth > 768) return;
-      var rect = videoContainerMobile.getBoundingClientRect();
-      var scrolled = -rect.top;
-      var range = videoContainerMobile.offsetHeight - window.innerHeight;
-
-      if (scrolled < 0 || scrolled > range) {
-        videoSectionMobile.classList.remove('video-visible', 'video-exit');
-        return;
+      // Try native fullscreen (Android Chrome)
+      if (videoMobile.requestFullscreen) {
+        videoMobile.requestFullscreen().catch(function() {});
+      } else if (videoMobile.webkitEnterFullscreen) {
+        // iOS Safari native fullscreen
+        videoMobile.webkitEnterFullscreen();
       }
 
-      var progress = scrolled / range;
-      if (progress < 0.15) {
-        videoSectionMobile.classList.add('video-visible');
-        videoSectionMobile.classList.remove('video-exit');
-      } else if (progress > 0.85) {
-        videoSectionMobile.classList.remove('video-visible');
-        videoSectionMobile.classList.add('video-exit');
-      } else {
-        videoSectionMobile.classList.add('video-visible');
-        videoSectionMobile.classList.remove('video-exit');
+      // When exiting fullscreen, show poster again if paused
+      function onFullscreenExit() {
+        if (!document.fullscreenElement && !videoMobile.webkitDisplayingFullscreen) {
+          if (videoMobile.paused || videoMobile.ended) {
+            videoMobile.style.display = 'none';
+            videoMobileWrap.classList.remove('playing');
+          } else {
+            // Video still playing — show inline
+            videoMobileWrap.classList.add('playing');
+          }
+        }
       }
-    }
 
-    window.addEventListener('scroll', onMobileVideoScroll, { passive: true });
-    onMobileVideoScroll();
+      document.addEventListener('fullscreenchange', onFullscreenExit);
+      videoMobile.addEventListener('webkitendfullscreen', onFullscreenExit);
+    });
   }
 
   // --- Mobile: scroll-driven social fade in ---

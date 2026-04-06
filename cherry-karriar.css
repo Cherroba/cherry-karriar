@@ -1341,18 +1341,20 @@ ul, ol {
     transform: translate3d(-60px, 0, 0);
   }
 
-  /* Video: sticky on mobile — tall scroll so it stays visible longer */
+  /* Video: normal scroll on mobile (not sticky — fullscreen on play) */
   .video-scroll-container {
-    height: 350svh;
+    height: auto;
   }
   .video-section {
-    height: 100svh;
-    padding-top: max(8vh, 70px) !important;
+    position: relative;
+    height: auto;
+    padding: 64px 20px !important;
     justify-content: flex-start !important;
+    overflow: visible;
   }
   .video-section .container {
     width: 100%;
-    padding: 0 20px;
+    padding: 0;
   }
 
   /* Social: sticky on mobile */
