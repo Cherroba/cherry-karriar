@@ -4,6 +4,43 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // --- Hero parallax fade on scroll ---
+  var heroWrapper = document.getElementById('heroWrapper');
+  var heroContent = document.querySelector('.hero-content');
+  var heroSection = document.querySelector('.hero');
+
+  if (heroWrapper && heroContent && heroSection) {
+    function onHeroScroll() {
+      var rect = heroWrapper.getBoundingClientRect();
+      var scrolled = -rect.top;
+      var range = heroWrapper.offsetHeight - window.innerHeight;
+
+      if (scrolled <= 0) {
+        heroContent.style.opacity = '1';
+        heroContent.style.transform = 'translateY(0) scale(1)';
+        heroSection.style.filter = '';
+        return;
+      }
+
+      if (scrolled > range) return;
+
+      var progress = scrolled / range; // 0 to 1
+      // Content fades up and scales down slightly
+      var opacity = 1 - progress * 1.5; // fades fully before end
+      var translateY = -progress * 60; // moves up
+      var scale = 1 - progress * 0.08; // subtle shrink
+      // Background gets slightly blurred
+      var blur = progress * 6;
+
+      heroContent.style.opacity = Math.max(0, opacity);
+      heroContent.style.transform = 'translateY(' + translateY + 'px) scale(' + scale + ')';
+      heroSection.style.filter = 'blur(' + blur + 'px)';
+    }
+
+    window.addEventListener('scroll', onHeroScroll, { passive: true });
+    onHeroScroll();
+  }
+
   // --- Mobile Navigation Toggle ---
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileNav = document.getElementById('mobileNav');

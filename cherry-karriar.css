@@ -308,16 +308,23 @@ ul, ol {
   color: var(--cherry-pink);
 }
 
-/* --- Hero Section --- */
+/* --- Hero Section (Sticky with parallax fade) --- */
+.hero-scroll-wrapper {
+  height: 150vh;
+  position: relative;
+}
+
 .hero {
-  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 120px 24px 80px;
-  position: relative;
   background: url('Facetune_16-12-2024-12-01-NYYY.JPG') center center / cover no-repeat;
+  overflow: hidden;
 }
 
 .hero::before {
@@ -332,6 +339,8 @@ ul, ol {
   position: relative;
   z-index: 1;
   max-width: 800px;
+  transition: opacity 0.1s linear, transform 0.1s linear;
+  will-change: opacity, transform;
 }
 
 .hero h1 {
@@ -667,8 +676,8 @@ ul, ol {
   flex-direction: column;
   align-items: center;
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(80, 0, 100, 0.25), transparent 70%),
-    var(--cherry-bg-dark);
+    radial-gradient(ellipse at 50% 0%, rgba(80, 0, 100, 0.15), transparent 70%),
+    var(--cherry-bg);
 }
 
 .values-heading {
@@ -1025,8 +1034,10 @@ ul, ol {
 .tiktok-feed {
   margin-top: 40px;
   max-width: var(--cherry-max-width);
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 24px;
 }
 
 /* --- Footer --- */
@@ -1195,7 +1206,7 @@ ul, ol {
   }
 
   .hero {
-    min-height: 85vh;
+    height: 100svh;
     padding: 100px 20px 60px;
   }
 
@@ -1330,9 +1341,9 @@ ul, ol {
     transform: translate3d(-60px, 0, 0);
   }
 
-  /* Video: sticky on mobile */
+  /* Video: sticky on mobile — tall scroll so it stays visible longer */
   .video-scroll-container {
-    height: 200svh;
+    height: 350svh;
   }
   .video-section {
     height: 100svh;
@@ -1342,6 +1353,11 @@ ul, ol {
   .video-section .container {
     width: 100%;
     padding: 0 20px;
+  }
+  .video-section .video-wrapper {
+    max-height: 55svh;
+    overflow: hidden;
+    border-radius: var(--cherry-radius-lg);
   }
 
   /* Social: sticky on mobile */
