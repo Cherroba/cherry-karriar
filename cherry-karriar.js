@@ -618,10 +618,28 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    var valuesSwipeActive = false;
+
     function onArcScroll() {
       var rect = valuesContainer.getBoundingClientRect();
       var scrolled = -rect.top;
       var range = valuesContainer.offsetHeight - window.innerHeight;
+
+      if (isMob()) {
+        // Mobile: only show first value when section enters view
+        if (scrolled < 0) {
+          valuesSwipeActive = false;
+          updateArc(-1);
+          return;
+        }
+        if (!valuesSwipeActive) {
+          valuesSwipeActive = true;
+          updateArc(0);
+        }
+        return;
+      }
+
+      // Desktop: scroll-driven
       if (scrolled < 0) { updateArc(-1); return; }
       if (scrolled > range) return;
       var progress = scrolled / range;
@@ -636,6 +654,34 @@ document.addEventListener('DOMContentLoaded', () => {
     initArcPositions();
     window.addEventListener('scroll', onArcScroll, { passive: true });
     window.addEventListener('resize', function() { initArcPositions(); onArcScroll(); });
+
+    // Mobile: swipe handling for values
+    if (window.innerWidth <= 768) {
+      var valuesSticky = valuesContainer.querySelector('.values-sticky');
+      if (valuesSticky) {
+        var valuesTouchStartX = 0;
+        var valuesTouchStartY = 0;
+
+        valuesSticky.addEventListener('touchstart', function(e) {
+          valuesTouchStartX = e.touches[0].clientX;
+          valuesTouchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        valuesSticky.addEventListener('touchend', function(e) {
+          if (!valuesSwipeActive) return;
+          var deltaX = e.changedTouches[0].clientX - valuesTouchStartX;
+          var deltaY = e.changedTouches[0].clientY - valuesTouchStartY;
+
+          if (Math.abs(deltaX) < 50 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+          if (deltaX < 0 && currentArcActive < TOTAL - 1) {
+            updateArc(currentArcActive + 1);
+          } else if (deltaX > 0 && currentArcActive > 0) {
+            updateArc(currentArcActive - 1);
+          }
+        }, { passive: true });
+      }
+    }
   }
 
 });

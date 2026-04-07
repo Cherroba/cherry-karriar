@@ -740,10 +740,9 @@ ul, ol {
   font-weight: 600;
 }
 
-/* Dots and swipe hints hidden on desktop */
+/* Dots hidden on desktop */
 .team-dots,
-.jobs-dots,
-.swipe-hint {
+.jobs-dots {
   display: none;
 }
 
@@ -917,7 +916,7 @@ ul, ol {
 
 /* Values mobile overrides */
 @media (max-width: 768px) {
-  .values-scroll-container { height: 450vh; }
+  .values-scroll-container { height: 150svh; }
   .values-heading { margin-top: 10vh; }
   .values-heading p { font-size: 0.9rem; }
   .arc-path { display: none; }
@@ -1356,32 +1355,6 @@ ul, ol {
   .team-dot.active {
     background: var(--cherry-pink);
     transform: scale(1.3);
-  }
-
-  /* Swipe hint for card sections */
-  .swipe-hint {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 12px;
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 0.03em;
-    animation: swipeHintPulse 2.5s ease-in-out infinite;
-  }
-  .swipe-hint svg {
-    width: 16px;
-    height: 16px;
-    fill: none;
-    stroke: rgba(255,255,255,0.35);
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  @keyframes swipeHintPulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
   }
 
   /* Jobs dots on mobile */
