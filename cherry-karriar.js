@@ -230,10 +230,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Mobile: scroll-driven jobs cards ---
+  // --- Mobile: swipe-driven jobs cards ---
   var jobsContainer = document.getElementById('jobsContainer');
   var jobCards = document.querySelectorAll('.job-card[data-job]');
+  var jobsDots = document.querySelectorAll('.jobs-dot');
   var currentJobCard = -1;
+  var jobsSwipeActive = false;
 
   function updateJobCard(index) {
     if (index === currentJobCard) return;
@@ -249,37 +251,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
+
+    jobsDots.forEach(function(dot, i) {
+      dot.classList.toggle('active', index >= 0 && i === index);
+    });
   }
 
-  function onJobsScroll() {
+  // Show first card when section scrolls into view, enable swipe
+  function onJobsScrollMobile() {
     if (!jobsContainer || window.innerWidth > 768) return;
     var rect = jobsContainer.getBoundingClientRect();
     var scrolled = -rect.top;
-    var range = jobsContainer.offsetHeight - window.innerHeight;
-    if (scrolled < 0) { updateJobCard(-1); return; }
-    if (scrolled > range) { return; }
 
-    var progress = scrolled / range;
-    var intro = 0.1;
-    var total = jobCards.length;
-
-    if (progress < intro) {
+    if (scrolled < 0) {
+      jobsSwipeActive = false;
       updateJobCard(-1);
-    } else {
-      var p = (progress - intro) / (1 - intro);
-      var idx = Math.min(Math.floor(p * total), total - 1);
-      updateJobCard(idx);
+      return;
+    }
+
+    // Show first card once in view
+    if (!jobsSwipeActive) {
+      jobsSwipeActive = true;
+      updateJobCard(0);
     }
   }
 
   if (jobsContainer && jobCards.length > 0 && window.innerWidth <= 768) {
     updateJobCard(-1);
-    window.addEventListener('scroll', onJobsScroll, { passive: true });
-    window.addEventListener('resize', function() {
-      if (window.innerWidth <= 768) {
-        onJobsScroll();
-      }
-    });
+    window.addEventListener('scroll', onJobsScrollMobile, { passive: true });
+
+    // Swipe handling
+    var jobsSection = jobsContainer.querySelector('.jobs-section');
+    if (jobsSection) {
+      var jobsTouchStartX = 0;
+      var jobsTouchStartY = 0;
+
+      jobsSection.addEventListener('touchstart', function(e) {
+        jobsTouchStartX = e.touches[0].clientX;
+        jobsTouchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      jobsSection.addEventListener('touchend', function(e) {
+        if (!jobsSwipeActive) return;
+        var deltaX = e.changedTouches[0].clientX - jobsTouchStartX;
+        var deltaY = e.changedTouches[0].clientY - jobsTouchStartY;
+
+        // Only count horizontal swipes (more horizontal than vertical)
+        if (Math.abs(deltaX) < 50 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+        var total = jobCards.length;
+        if (deltaX < 0 && currentJobCard < total - 1) {
+          // Swipe left → next
+          updateJobCard(currentJobCard + 1);
+        } else if (deltaX > 0 && currentJobCard > 0) {
+          // Swipe right → prev
+          updateJobCard(currentJobCard - 1);
+        }
+      }, { passive: true });
+    }
   }
 
   // --- Desktop: scroll-driven video fade in/out ---
@@ -400,11 +429,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
-  // --- Testimonial Cards: scroll-driven on mobile ---
+  // --- Testimonial Cards: swipe-driven on mobile ---
   var teamContainer = document.getElementById('teamContainer');
   var teamCards = document.querySelectorAll('.testimonial-card[data-card]');
   var teamDots = document.querySelectorAll('.team-dot');
   var currentTeamCard = -1;
+  var teamSwipeActive = false;
 
   function updateTeamCard(index) {
     if (index === currentTeamCard) return;
@@ -426,39 +456,58 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function onTeamScroll() {
+  // Show first card when section scrolls into view, enable swipe
+  function onTeamScrollMobile() {
     if (!teamContainer || window.innerWidth > 768) return;
     var rect = teamContainer.getBoundingClientRect();
     var scrolled = -rect.top;
-    var range = teamContainer.offsetHeight - window.innerHeight;
-    if (scrolled < 0) { updateTeamCard(-1); return; }
-    if (scrolled > range) return;
 
-    var progress = scrolled / range; // 0 to 1
-    // 0–0.1: empty intro, 0.1–0.8: cycle cards, 0.8–1.0: empty outro
-    var intro = 0.1;
-    var outro = 0.2;
-    var total = teamCards.length;
-
-    if (progress < intro) {
+    if (scrolled < 0) {
+      teamSwipeActive = false;
       updateTeamCard(-1);
-    } else if (progress > (1 - outro)) {
-      updateTeamCard(total);
-    } else {
-      var p = (progress - intro) / (1 - intro - outro);
-      var idx = Math.min(Math.floor(p * total), total - 1);
-      updateTeamCard(idx);
+      return;
+    }
+
+    // Show first card once in view
+    if (!teamSwipeActive) {
+      teamSwipeActive = true;
+      updateTeamCard(0);
     }
   }
 
   if (teamContainer && teamCards.length > 0 && window.innerWidth <= 768) {
     updateTeamCard(-1);
-    window.addEventListener('scroll', onTeamScroll, { passive: true });
-    window.addEventListener('resize', function() {
-      if (window.innerWidth <= 768) {
-        onTeamScroll();
-      }
-    });
+    window.addEventListener('scroll', onTeamScrollMobile, { passive: true });
+
+    // Swipe handling
+    var teamSection = teamContainer.querySelector('.team-section');
+    if (teamSection) {
+      var teamTouchStartX = 0;
+      var teamTouchStartY = 0;
+
+      teamSection.addEventListener('touchstart', function(e) {
+        teamTouchStartX = e.touches[0].clientX;
+        teamTouchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      teamSection.addEventListener('touchend', function(e) {
+        if (!teamSwipeActive) return;
+        var deltaX = e.changedTouches[0].clientX - teamTouchStartX;
+        var deltaY = e.changedTouches[0].clientY - teamTouchStartY;
+
+        // Only count horizontal swipes (more horizontal than vertical)
+        if (Math.abs(deltaX) < 50 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+        var total = teamCards.length;
+        if (deltaX < 0 && currentTeamCard < total - 1) {
+          // Swipe left → next
+          updateTeamCard(currentTeamCard + 1);
+        } else if (deltaX > 0 && currentTeamCard > 0) {
+          // Swipe right → prev
+          updateTeamCard(currentTeamCard - 1);
+        }
+      }, { passive: true });
+    }
   }
 
   // --- Rainbow Arc Values Section ---
