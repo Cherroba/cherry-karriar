@@ -1302,6 +1302,12 @@ ul, ol {
   .team-scroll-container {
     height: 150svh;
   }
+  /* Let browser handle vertical scroll natively, but give horizontal swipes to JS */
+  .team-section,
+  .jobs-section,
+  .values-sticky {
+    touch-action: pan-y;
+  }
   .team-section {
     padding: 0 !important;
     padding-top: max(10vh, 90px) !important;

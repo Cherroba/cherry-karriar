@@ -4,6 +4,58 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // --- Shared horizontal swipe helper ---
+  // Locks direction early, preventDefault for horizontal to stop page scroll,
+  // falls back to native vertical scroll if user swipes up/down.
+  function setupSwipe(opts) {
+    var el = opts.element;
+    if (!el) return;
+    var startX = 0, startY = 0;
+    var lockedDir = null; // null | 'h' | 'v'
+    var HORIZ_THRESHOLD = 40;
+    var LOCK_THRESHOLD = 8;
+
+    el.addEventListener('touchstart', function(e) {
+      if (e.touches.length !== 1) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      lockedDir = null;
+    }, { passive: true });
+
+    el.addEventListener('touchmove', function(e) {
+      if (!opts.isActive()) return;
+      if (lockedDir === 'v') return; // already decided vertical — let browser scroll
+      var dx = e.touches[0].clientX - startX;
+      var dy = e.touches[0].clientY - startY;
+      if (!lockedDir) {
+        if (Math.abs(dx) > LOCK_THRESHOLD || Math.abs(dy) > LOCK_THRESHOLD) {
+          lockedDir = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+        }
+      }
+      if (lockedDir === 'h') {
+        // Prevent the page from scrolling vertically during a horizontal swipe
+        if (e.cancelable) e.preventDefault();
+      }
+    }, { passive: false });
+
+    el.addEventListener('touchend', function(e) {
+      if (!opts.isActive() || lockedDir !== 'h') return;
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) < HORIZ_THRESHOLD) return;
+      var idx = opts.getIndex();
+      var total = opts.total();
+      if (dx < 0 && idx < total - 1) {
+        opts.onChange(idx + 1);
+      } else if (dx > 0 && idx > 0) {
+        opts.onChange(idx - 1);
+      }
+    }, { passive: true });
+
+    el.addEventListener('touchcancel', function() {
+      lockedDir = null;
+    }, { passive: true });
+  }
+
   // --- Hero parallax fade on scroll ---
   var heroWrapper = document.getElementById('heroWrapper');
   var heroContent = document.querySelector('.hero-content');
@@ -280,35 +332,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateJobCard(-1);
     window.addEventListener('scroll', onJobsScrollMobile, { passive: true });
 
-    // Swipe handling
-    var jobsSection = jobsContainer.querySelector('.jobs-section');
-    if (jobsSection) {
-      var jobsTouchStartX = 0;
-      var jobsTouchStartY = 0;
-
-      jobsSection.addEventListener('touchstart', function(e) {
-        jobsTouchStartX = e.touches[0].clientX;
-        jobsTouchStartY = e.touches[0].clientY;
-      }, { passive: true });
-
-      jobsSection.addEventListener('touchend', function(e) {
-        if (!jobsSwipeActive) return;
-        var deltaX = e.changedTouches[0].clientX - jobsTouchStartX;
-        var deltaY = e.changedTouches[0].clientY - jobsTouchStartY;
-
-        // Only count horizontal swipes (more horizontal than vertical)
-        if (Math.abs(deltaX) < 50 || Math.abs(deltaX) < Math.abs(deltaY)) return;
-
-        var total = jobCards.length;
-        if (deltaX < 0 && currentJobCard < total - 1) {
-          // Swipe left → next
-          updateJobCard(currentJobCard + 1);
-        } else if (deltaX > 0 && currentJobCard > 0) {
-          // Swipe right → prev
-          updateJobCard(currentJobCard - 1);
-        }
-      }, { passive: true });
-    }
+    setupSwipe({
+      element: jobsContainer.querySelector('.jobs-section'),
+      isActive: function() { return jobsSwipeActive; },
+      getIndex: function() { return currentJobCard; },
+      total: function() { return jobCards.length; },
+      onChange: updateJobCard
+    });
   }
 
   // --- Desktop: scroll-driven video fade in/out ---
@@ -479,35 +509,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTeamCard(-1);
     window.addEventListener('scroll', onTeamScrollMobile, { passive: true });
 
-    // Swipe handling
-    var teamSection = teamContainer.querySelector('.team-section');
-    if (teamSection) {
-      var teamTouchStartX = 0;
-      var teamTouchStartY = 0;
-
-      teamSection.addEventListener('touchstart', function(e) {
-        teamTouchStartX = e.touches[0].clientX;
-        teamTouchStartY = e.touches[0].clientY;
-      }, { passive: true });
-
-      teamSection.addEventListener('touchend', function(e) {
-        if (!teamSwipeActive) return;
-        var deltaX = e.changedTouches[0].clientX - teamTouchStartX;
-        var deltaY = e.changedTouches[0].clientY - teamTouchStartY;
-
-        // Only count horizontal swipes (more horizontal than vertical)
-        if (Math.abs(deltaX) < 50 || Math.abs(deltaX) < Math.abs(deltaY)) return;
-
-        var total = teamCards.length;
-        if (deltaX < 0 && currentTeamCard < total - 1) {
-          // Swipe left → next
-          updateTeamCard(currentTeamCard + 1);
-        } else if (deltaX > 0 && currentTeamCard > 0) {
-          // Swipe right → prev
-          updateTeamCard(currentTeamCard - 1);
-        }
-      }, { passive: true });
-    }
+    setupSwipe({
+      element: teamContainer.querySelector('.team-section'),
+      isActive: function() { return teamSwipeActive; },
+      getIndex: function() { return currentTeamCard; },
+      total: function() { return teamCards.length; },
+      onChange: updateTeamCard
+    });
   }
 
   // --- Rainbow Arc Values Section ---
@@ -657,30 +665,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mobile: swipe handling for values
     if (window.innerWidth <= 768) {
-      var valuesSticky = valuesContainer.querySelector('.values-sticky');
-      if (valuesSticky) {
-        var valuesTouchStartX = 0;
-        var valuesTouchStartY = 0;
-
-        valuesSticky.addEventListener('touchstart', function(e) {
-          valuesTouchStartX = e.touches[0].clientX;
-          valuesTouchStartY = e.touches[0].clientY;
-        }, { passive: true });
-
-        valuesSticky.addEventListener('touchend', function(e) {
-          if (!valuesSwipeActive) return;
-          var deltaX = e.changedTouches[0].clientX - valuesTouchStartX;
-          var deltaY = e.changedTouches[0].clientY - valuesTouchStartY;
-
-          if (Math.abs(deltaX) < 50 || Math.abs(deltaX) < Math.abs(deltaY)) return;
-
-          if (deltaX < 0 && currentArcActive < TOTAL - 1) {
-            updateArc(currentArcActive + 1);
-          } else if (deltaX > 0 && currentArcActive > 0) {
-            updateArc(currentArcActive - 1);
-          }
-        }, { passive: true });
-      }
+      setupSwipe({
+        element: valuesContainer.querySelector('.values-sticky'),
+        isActive: function() { return valuesSwipeActive; },
+        getIndex: function() { return currentArcActive; },
+        total: function() { return TOTAL; },
+        onChange: updateArc
+      });
     }
   }
 
