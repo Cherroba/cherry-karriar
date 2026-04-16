@@ -32,22 +32,96 @@
       margin: 0 auto;
     }
 
+    /* Loading state */
+    .loading-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--cherry-text-muted);
+    }
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: var(--cherry-pink);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Job content card */
     .annons-card {
       background: var(--cherry-card-bg);
       border: 1px solid var(--cherry-card-border);
       border-radius: var(--cherry-radius-lg);
-      overflow: hidden;
+      padding: 48px;
+      margin-bottom: 24px;
+    }
+
+    .annons-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      color: #fff;
       margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
-    .annons-frame {
-      width: 100%;
-      min-height: 600px;
-      border: none;
-      display: block;
-      background: #fff;
+    .annons-body {
+      color: rgba(255,255,255,0.8);
+      font-size: 1rem;
+      line-height: 1.8;
     }
+    .annons-body p {
+      margin-bottom: 14px;
+    }
+    .annons-body p:last-child { margin-bottom: 0; }
+    .annons-body strong { color: #fff; }
+    .annons-body a { color: var(--cherry-pink); }
 
+    /* Highlights strip */
+    .annons-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 24px 0 32px;
+    }
+    .highlight-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,0,89,0.1);
+      border: 1px solid rgba(255,0,89,0.25);
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .highlight-chip span { color: var(--cherry-pink); font-size: 1rem; }
+
+    /* Contact section */
+    .annons-contact {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .annons-contact h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 12px;
+    }
+    .annons-contact p {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.95rem;
+      margin: 4px 0;
+    }
+    .annons-contact a { color: var(--cherry-pink); }
+
+    /* Apply bar */
     .apply-bar {
       display: flex;
       align-items: center;
@@ -78,18 +152,19 @@
       white-space: nowrap;
       transition: background 0.3s ease, transform 0.3s ease;
     }
-    .btn-apply:hover {
-      background: #e6004f;
-      transform: translateY(-2px);
-    }
+    .btn-apply:hover { background: #e6004f; transform: translateY(-2px); }
     .btn-apply::after { content: '\2192'; }
 
+    /* Error state */
+    .error-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .error-state p { color: var(--cherry-text-muted); margin-bottom: 24px; }
+
     @media (max-width: 600px) {
-      .apply-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 24px;
-      }
+      .annons-card { padding: 24px; }
+      .apply-bar { flex-direction: column; align-items: flex-start; padding: 24px; }
       .btn-apply { width: 100%; justify-content: center; }
     }
   </style>
@@ -128,13 +203,29 @@
 
       <div class="annons-wrapper">
 
-        <div class="annons-card">
-          <iframe id="annonsFrame" class="annons-frame" src="" title="Jobbannons"></iframe>
+        <!-- Loading -->
+        <div class="loading-state" id="loadingState">
+          <div class="loading-spinner"></div>
+          <p>Hämtar annons...</p>
         </div>
 
-        <div class="apply-bar">
-          <p>Redo att söka? Skicka in din ansökan direkt.</p>
-          <a href="#" id="applyLink" class="btn-apply">Sök tjänsten</a>
+        <!-- Content (hidden until loaded) -->
+        <div id="annonsContent" style="display:none">
+          <div class="annons-card">
+            <h1 class="annons-title" id="annonsTitle"></h1>
+            <div class="annons-body" id="annonsBody"></div>
+          </div>
+
+          <div class="apply-bar">
+            <p>Redo att söka? Skicka in din ansökan direkt.</p>
+            <a href="#" id="applyLink" class="btn-apply">Sök tjänsten</a>
+          </div>
+        </div>
+
+        <!-- Error fallback -->
+        <div class="error-state" id="errorState" style="display:none">
+          <p>Kunde inte ladda annonsen. Öppna den direkt på Cherrys rekryteringssystem.</p>
+          <a href="#" id="fallbackLink" class="btn-apply">Visa annons &rarr;</a>
         </div>
 
       </div>
@@ -166,24 +257,61 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const adID = params.get('AdID') || '';
+    const jokerURL = 'https://jokerpublish.cherry.se/softadmin.aspx?id=4&AdID=' + adID;
+    const proxyURL = 'https://api.allorigins.win/get?url=' + encodeURIComponent(jokerURL);
 
-    // Load jokerpublish annons into iframe
-    document.getElementById('annonsFrame').src =
-      'https://jokerpublish.cherry.se/softadmin.aspx?id=4&AdID=' + adID;
+    document.getElementById('applyLink').href = 'sok-tjanst.html?AdID=' + adID;
+    document.getElementById('fallbackLink').href = jokerURL;
 
-    // "Sök tjänsten" goes to our styled application form
-    document.getElementById('applyLink').href =
-      'sok-tjanst.html?AdID=' + adID;
+    function showError() {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('errorState').style.display = 'block';
+    }
 
-    // Auto-resize iframe to content height once loaded (same-origin only)
-    document.getElementById('annonsFrame').addEventListener('load', function () {
-      try {
-        const h = this.contentWindow.document.body.scrollHeight;
-        if (h > 200) this.style.minHeight = h + 'px';
-      } catch (e) {
-        // Cross-origin – use fixed min-height defined in CSS
+    function renderContent(html) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      // Title from <title> tag
+      const rawTitle = doc.querySelector('title')?.textContent?.trim() || 'Jobbtjänst';
+      document.getElementById('annonsTitle').textContent = rawTitle;
+      document.title = rawTitle + ' - Cherry';
+
+      // Main content from .content div
+      const contentEl = doc.querySelector('.content');
+      if (!contentEl) { showError(); return; }
+
+      // Remove nested wrapper paragraph if present (double <p><p>...</p></p>)
+      const outerP = contentEl.querySelector('p > p');
+      if (outerP) {
+        contentEl.innerHTML = outerP.parentElement.innerHTML;
       }
-    });
+
+      // Strip any remaining images and old-style links
+      contentEl.querySelectorAll('img').forEach(el => el.remove());
+      // Remove "Klicka här för att söka tjänsten" link from content
+      contentEl.querySelectorAll('a').forEach(a => {
+        if (a.href && a.href.includes('softadmin')) a.closest('p')?.remove();
+      });
+
+      document.getElementById('annonsBody').innerHTML = contentEl.innerHTML;
+
+      // Show content
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('annonsContent').style.display = 'block';
+    }
+
+    // Fetch via CORS proxy
+    fetch(proxyURL)
+      .then(r => {
+        if (!r.ok) throw new Error('proxy error');
+        return r.json();
+      })
+      .then(data => {
+        if (!data.contents) throw new Error('empty response');
+        renderContent(data.contents);
+      })
+      .catch(() => showError());
   </script>
 </body>
 </html>
