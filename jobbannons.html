@@ -258,7 +258,6 @@
     const params = new URLSearchParams(window.location.search);
     const adID = params.get('AdID') || '';
     const jokerURL = 'https://jokerpublish.cherry.se/softadmin.aspx?id=4&AdID=' + adID;
-    const proxyURL = 'https://api.allorigins.win/get?url=' + encodeURIComponent(jokerURL);
 
     document.getElementById('applyLink').href = 'sok-tjanst.html?AdID=' + adID;
     document.getElementById('fallbackLink').href = jokerURL;
@@ -268,48 +267,33 @@
       document.getElementById('errorState').style.display = 'block';
     }
 
-    function renderContent(html) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
+    function renderJob(title, content) {
+      document.getElementById('annonsTitle').textContent = title;
+      document.title = title + ' - Cherry';
 
-      // Title from <title> tag
-      const rawTitle = doc.querySelector('title')?.textContent?.trim() || 'Jobbtjänst';
-      document.getElementById('annonsTitle').textContent = rawTitle;
-      document.title = rawTitle + ' - Cherry';
+      // Parse content HTML and clean it up
+      const tmp = document.createElement('div');
+      tmp.innerHTML = content;
 
-      // Main content from .content div
-      const contentEl = doc.querySelector('.content');
-      if (!contentEl) { showError(); return; }
-
-      // Remove nested wrapper paragraph if present (double <p><p>...</p></p>)
-      const outerP = contentEl.querySelector('p > p');
-      if (outerP) {
-        contentEl.innerHTML = outerP.parentElement.innerHTML;
-      }
-
-      // Strip any remaining images and old-style links
-      contentEl.querySelectorAll('img').forEach(el => el.remove());
-      // Remove "Klicka här för att söka tjänsten" link from content
-      contentEl.querySelectorAll('a').forEach(a => {
+      // Remove images and jokerpublish links
+      tmp.querySelectorAll('img').forEach(el => el.remove());
+      tmp.querySelectorAll('a').forEach(a => {
         if (a.href && a.href.includes('softadmin')) a.closest('p')?.remove();
       });
 
-      document.getElementById('annonsBody').innerHTML = contentEl.innerHTML;
+      document.getElementById('annonsBody').innerHTML = tmp.innerHTML;
 
-      // Show content
       document.getElementById('loadingState').style.display = 'none';
       document.getElementById('annonsContent').style.display = 'block';
     }
 
-    // Fetch via CORS proxy
-    fetch(proxyURL)
-      .then(r => {
-        if (!r.ok) throw new Error('proxy error');
-        return r.json();
-      })
+    // Load from local cached JSON – same origin, no CORS issues
+    fetch('jobb-data.json')
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(data => {
-        if (!data.contents) throw new Error('empty response');
-        renderContent(data.contents);
+        const job = data[adID];
+        if (!job) throw new Error('not found');
+        renderJob(job.title, job.content);
       })
       .catch(() => showError());
   </script>
