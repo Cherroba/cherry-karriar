@@ -89,13 +89,25 @@ BODY {
   margin: 0 auto;
   width: 300px;
   padding: 12px 0;
+  text-align: center;
 }
 
+/* Dölj annons-specifik bild (varierar per jobb) */
 #sublogo img {
+  display: none;
+}
+
+/* Visa Cherry-logotypen via CSS i stället */
+#sublogo::after {
+  content: '';
   display: block;
   margin: 0 auto;
-  max-height: 50px;
-  width: auto;
+  width: 160px;
+  height: 48px;
+  background-image: url('../Cherry-Logo-Default-Alpha.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
 /* --- Subwrapper / Main Content --- */
@@ -492,8 +504,57 @@ button:hover {
   height: auto;
   margin: 0 auto;
   overflow: hidden;
-  width: 600px;
-  max-width: 95%;
+  width: 100%;
+  max-width: 860px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* Annons-sidan (page4): innehåll i kortdesign */
+#page4 .subwrapper {
+  padding: 32px 0;
+}
+
+#page4 .content {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 40px;
+  margin-bottom: 24px;
+}
+
+#page4 .content p:first-child {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+#page4 .content p strong {
+  color: #FF0059;
+}
+
+#page4 .footerwrapper {
+  padding: 0 0 32px;
+}
+
+#page4 .footerwrapper a {
+  display: inline-block;
+  padding: 14px 36px;
+  background: #FF0059;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: none;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+#page4 .footerwrapper a:hover {
+  background: #e6004f;
+  color: #ffffff;
+  transform: translateY(-2px);
 }
 
 /* --- Footer --- */
@@ -541,30 +602,9 @@ button:hover {
   margin-top: 20px;
 }
 
-/* --- Social --- */
+/* --- Social (dölj gamla Facebook/Twitter-knappar) --- */
 #social {
-  float: left;
-  height: 40px;
-  width: 100%;
-}
-
-#fbook {
-  float: left;
-  height: auto;
-  margin-top: 20px;
-  width: 45%;
-}
-
-#twitter {
-  float: right;
-  height: auto;
-  margin-top: 20px;
-  text-align: right;
-  width: 45%;
-}
-
-.twitter-share-button {
-  width: 78px !important;
+  display: none;
 }
 
 /* --- Thank You page --- */
