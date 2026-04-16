@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sök tjänst - Cherry</title>
+  <link rel="stylesheet" href="cherry-karriar.css">
+  <style>
+    .page-content {
+      padding-top: 80px;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(255, 0, 89, 0.08), transparent 60%),
+        radial-gradient(ellipse at 70% 80%, rgba(80, 0, 100, 0.2), transparent 60%),
+        var(--cherry-bg);
+    }
+
+    .page-intro {
+      max-width: 700px;
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+    .page-intro h1 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .page-intro p {
+      color: var(--cherry-text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--cherry-text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+      transition: color var(--cherry-transition);
+    }
+    .back-link:hover { color: var(--cherry-pink); }
+    .back-link::before { content: '\2190'; }
+
+    /* Form card */
+    .form-card {
+      max-width: 700px;
+      margin: 0 auto 48px;
+      background: var(--cherry-card-bg);
+      border: 1px solid var(--cherry-card-border);
+      border-radius: var(--cherry-radius-lg);
+      padding: 40px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full-width { grid-column: 1 / -1; }
+    .form-group label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .form-group label .req { color: var(--cherry-pink); }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group select,
+    .form-group textarea {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      color: #fff;
+      font-family: inherit;
+      transition: border-color 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .form-group input[type="text"]:focus,
+    .form-group input[type="email"]:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--cherry-pink);
+      outline: none;
+      background: rgba(255,255,255,0.1);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(255,255,255,0.3); }
+    .form-group select option { background: #25002D; color: #fff; }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .form-group input[type="file"] {
+      background: rgba(255,255,255,0.05);
+      border: 2px dashed rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      width: 100%;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+    .form-group input[type="file"]:hover {
+      border-color: var(--cherry-pink);
+    }
+
+    .form-section-title {
+      grid-column: 1 / -1;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.35);
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 4px;
+    }
+
+    .checkbox-row {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .checkbox-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--cherry-pink);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .checkbox-item label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+      cursor: pointer;
+    }
+
+    .form-note {
+      grid-column: 1 / -1;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      padding-top: 8px;
+    }
+
+    .form-buttons {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 16px;
+      padding-top: 8px;
+    }
+    .form-buttons .btn-submit {
+      padding: 14px 36px;
+      background: var(--cherry-pink);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .form-buttons .btn-submit:hover {
+      background: #e6004f;
+      transform: translateY(-2px);
+    }
+    .form-buttons .btn-cancel {
+      padding: 14px 28px;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-size: 1rem;
+      font-weight: 600;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .form-buttons .btn-cancel:hover {
+      border-color: rgba(255,255,255,0.3);
+      color: #fff;
+    }
+
+    .hidden-iframe { display: none; }
+
+    /* Integritetspolicy overlay */
+    .policy-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10, 0, 15, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 80px 20px 40px;
+      animation: fadeIn 0.3s ease;
+    }
+    .policy-overlay.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .policy-card {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--cherry-card-bg);
+      border: 1px solid var(--cherry-card-border);
+      border-radius: var(--cherry-radius-lg);
+      padding: 40px;
+      animation: slideUp 0.4s ease;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .policy-card h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .policy-text {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 24px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      margin-bottom: 24px;
+      color: var(--cherry-text-muted);
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    .policy-text::-webkit-scrollbar { width: 6px; }
+    .policy-text::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }
+    .policy-text::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+    .policy-text h3 { color: #fff; font-size: 1rem; font-weight: 700; margin: 20px 0 8px; }
+    .policy-text h3:first-child { margin-top: 0; }
+    .policy-text p { margin-bottom: 12px; }
+    .policy-note {
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.8rem;
+      margin-top: 16px;
+    }
+    .policy-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+    .policy-buttons .btn-save {
+      padding: 14px 40px;
+      background: var(--cherry-pink);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .policy-buttons .btn-save:hover {
+      background: #e6004f;
+      transform: translateY(-2px);
+    }
+    .policy-buttons .btn-back {
+      padding: 14px 28px;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-size: 1rem;
+      font-weight: 600;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .policy-buttons .btn-back:hover {
+      border-color: rgba(255,255,255,0.3);
+      color: #fff;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-card { padding: 24px; }
+      .policy-card { padding: 24px; }
+      .policy-buttons { flex-direction: column; }
+      .checkbox-row { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Meny">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="cherry-karriar.html" class="header-logo">
+        <img src="Cherry-Logo-Default-Alpha.svg" alt="Cherry">
+      </a>
+      <a href="https://cherry.se/kontakt" class="header-contact-btn">Kontakt</a>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="https://cherry.se">Hem</a>
+    <a href="https://cherry.se/samarbeten">Samarbeten</a>
+    <a href="https://cherry.se/events">Events</a>
+    <a href="cherry-karriar.html" class="active">Karriär</a>
+    <a href="https://cherry.se/support">Support</a>
+    <a href="https://cherry.se/kontakt">Kontakt</a>
+    <a href="https://cherry.se/om-cherry">Om Cherry</a>
+    <a href="https://cherry.se/spelregler">Spelregler</a>
+    <a href="https://cherry.se/spelomsorg">Spelomsorg</a>
+  </nav>
+
+  <!-- Hidden iframe for token extraction from jokerpublish -->
+  <iframe id="sourceFrame" class="hidden-iframe" src=""></iframe>
+
+  <main class="page-content">
+    <div class="container" style="padding-top: 40px;">
+
+      <a id="backLink" href="lediga-tjanster.html" class="back-link">Tillbaka till annonsen</a>
+
+      <div class="page-intro">
+        <h1>Sök tjänst</h1>
+        <p>Fyll i formuläret nedan så behandlar vi din ansökan så snart som möjligt.</p>
+      </div>
+
+      <div class="form-card">
+        <form id="sokForm" class="form-grid" method="post" enctype="multipart/form-data">
+
+          <!-- Hidden fields from jokerpublish -->
+          <input type="hidden" name="sa_pagecontext" id="hid_pagecontext">
+          <input type="hidden" name="sa_rawcontext" id="hid_rawcontext">
+          <input type="hidden" name="sa_postbackform" id="hid_postbackform">
+
+          <!-- Personuppgifter -->
+          <div class="form-section-title full-width">Personuppgifter</div>
+
+          <div class="form-group">
+            <label for="i21">Förnamn <span class="req">*</span></label>
+            <input type="text" id="i21" name="i21" placeholder="Ditt förnamn" required>
+          </div>
+
+          <div class="form-group">
+            <label for="i22">Efternamn <span class="req">*</span></label>
+            <input type="text" id="i22" name="i22" placeholder="Ditt efternamn" required>
+          </div>
+
+          <div class="form-group">
+            <label for="i23">Födelsedata <span class="req">*</span></label>
+            <input type="text" id="i23" name="i23" placeholder="ÅÅÅÅ-MM-DD" required>
+          </div>
+
+          <div class="form-group">
+            <label for="i24">Kön <span class="req">*</span></label>
+            <select id="i24" name="i24" required>
+              <option value="">Välj</option>
+              <option value="1">Man</option>
+              <option value="0">Kvinna</option>
+            </select>
+          </div>
+
+          <!-- Adress -->
+          <div class="form-section-title full-width">Adress</div>
+
+          <div class="form-group full-width">
+            <label for="i25">Adress <span class="req">*</span></label>
+            <input type="text" id="i25" name="i25" placeholder="Gatuadress" required>
+          </div>
+
+          <div class="form-group">
+            <label for="i26">Postnummer <span class="req">*</span></label>
+            <input type="text" id="i26" name="i26" placeholder="123 45" required>
+          </div>
+
+          <div class="form-group">
+            <label for="i27">Stad <span class="req">*</span></label>
+            <input type="text" id="i27" name="i27" placeholder="Din stad" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="i28">Land <span class="req">*</span></label>
+            <select id="i28" name="i28" required>
+              <option value="">Välj land</option>
+              <option value="SE" selected>Sverige</option>
+              <option value="NO">Norge</option>
+              <option value="DK">Danmark</option>
+              <option value="FI">Finland</option>
+            </select>
+          </div>
+
+          <!-- Kontaktuppgifter -->
+          <div class="form-section-title full-width">Kontaktuppgifter</div>
+
+          <div class="form-group">
+            <label for="i29">E-postadress <span class="req">*</span></label>
+            <input type="email" id="i29" name="i29" placeholder="din@email.se" required>
+          </div>
+
+          <div class="form-group">
+            <label for="i30">Bekräfta e-postadress <span class="req">*</span></label>
+            <input type="email" id="i30" name="i30" placeholder="din@email.se" required>
+          </div>
+
+          <div class="form-group">
+            <label for="i32">Mobilnummer <span class="req">*</span></label>
+            <input type="text" id="i32" name="i32" placeholder="07X-XXX XX XX" required>
+          </div>
+
+          <!-- Bilagor -->
+          <div class="form-section-title full-width">Bilagor</div>
+
+          <div class="form-group">
+            <label for="i33">Bifoga foto</label>
+            <input type="file" id="i33" name="i33" accept="image/*">
+          </div>
+
+          <div class="form-group">
+            <label for="i34">Bifoga dokument</label>
+            <input type="file" id="i34" name="i34" accept=".pdf,.doc,.docx">
+          </div>
+
+          <!-- Övrigt -->
+          <div class="form-section-title full-width">Övrigt</div>
+
+          <div class="checkbox-row">
+            <div class="checkbox-item">
+              <input type="checkbox" id="i36_0" name="i36_0" value="1">
+              <label for="i36_0">Har du körkort?</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="i36_1" name="i36_1" value="1">
+              <label for="i36_1">Har du tillgång till bil?</label>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="i36_2">Var såg du den här annonsen?</label>
+            <input type="text" id="i36_2" name="i36_2" placeholder="T.ex. LinkedIn, cherry.se, en vän...">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="i37">Övrig information</label>
+            <textarea id="i37" name="i37" placeholder="Berätta gärna mer om dig själv..."></textarea>
+          </div>
+
+          <div class="form-note">
+            Du måste läsa igenom vår Integritetspolicy innan du skickar in din ansökan. Tryck på knappen Vidare nedan för att komma dit.
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" class="btn-submit">Vidare</button>
+            <a id="cancelLink" href="lediga-tjanster.html" class="btn-cancel">Avbryt</a>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- INTEGRITETSPOLICY OVERLAY -->
+  <div class="policy-overlay" id="policyOverlay">
+    <div class="policy-card">
+      <h2>Integritetspolicy</h2>
+      <div class="policy-text">
+        <h3>Behandling av personuppgifter</h3>
+        <p>Cherry AB (publ) och dess dotterbolag ("Cherry") värnar om din integritet och är angelägna om att skydda dina personuppgifter. Denna integritetspolicy förklarar hur vi samlar in, använder, delar och skyddar dina personuppgifter i samband med din jobbansökan.</p>
+
+        <h3>Vilka uppgifter samlar vi in?</h3>
+        <p>I samband med din ansökan samlar vi in följande personuppgifter: förnamn, efternamn, födelsedata, kön, adressuppgifter, e-postadress, mobiltelefonnummer samt eventuellt bifogat foto och dokument.</p>
+
+        <h3>Varför behandlar vi dina uppgifter?</h3>
+        <p>Vi behandlar dina personuppgifter för att kunna hantera din ansökan och kontakta dig inför eventuell intervju eller anställning. Den rättsliga grunden för behandlingen är ditt samtycke som du ger genom att skicka in din ansökan.</p>
+
+        <h3>Hur länge sparar vi dina uppgifter?</h3>
+        <p>Dina personuppgifter sparas under rekryteringsprocessen och i upp till 12 månader därefter, om du ger ditt samtycke. Ansökan raderas annars när rekryteringen avslutas.</p>
+
+        <h3>Vilka kan få tillgång till dina uppgifter?</h3>
+        <p>Dina personuppgifter delas med Cherrys rekryteringsansvariga och regionkontor. Vi delar aldrig dina uppgifter med tredje part för marknadsföringssyften.</p>
+
+        <h3>Dina rättigheter</h3>
+        <p>Du har rätt att när som helst återkalla ditt samtycke, begära tillgång till dina personuppgifter, begära rättelse eller radering av dina uppgifter. Du har även rätt att lämna klagomål till Integritetsskyddsmyndigheten (IMY).</p>
+
+        <h3>Kontakt</h3>
+        <p>Om du har frågor om vår behandling av dina personuppgifter kan du kontakta oss på: Cherry AB, Box 7003, 169 07 Solna, eller via e-post till hr@cherry.se.</p>
+      </div>
+      <p class="policy-note">Genom att klicka "Skicka ansökan" godkänner du att Cherry behandlar dina personuppgifter enligt ovan.</p>
+      <div class="policy-buttons">
+        <button type="button" class="btn-save" id="btnSubmitFinal">Skicka ansökan</button>
+        <button type="button" class="btn-back" id="btnBackToForm">Tillbaka</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <nav class="footer-nav">
+        <a href="https://cherry.se">Hem</a>
+        <a href="https://cherry.se/samarbeten">Samarbeten</a>
+        <a href="https://cherry.se/events">Events</a>
+        <a href="cherry-karriar.html">Karriär</a>
+        <a href="https://cherry.se/support">Support</a>
+        <a href="https://cherry.se/kontakt">Kontakt</a>
+        <a href="https://cherry.se/om-cherry">Om Cherry</a>
+        <a href="https://cherry.se/spelregler">Spelregler</a>
+        <a href="https://cherry.se/spelomsorg">Spelomsorg</a>
+      </nav>
+      <div class="footer-logo">
+        <img src="Cherry-Logo-Default-Alpha.svg" alt="Cherry">
+      </div>
+      <div class="footer-copyright">&copy; 2026 Cherry. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="cherry-karriar.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const adID = params.get('AdID') || '';
+    const jokerpublishBase = 'https://jokerpublish.cherry.se/softadmin.aspx';
+
+    // Set back link to the annons page
+    if (adID) {
+      document.getElementById('backLink').href = 'jobbannons.html?AdID=' + adID;
+      document.getElementById('cancelLink').href = 'jobbannons.html?AdID=' + adID;
+    }
+
+    // Load jokerpublish form in hidden iframe to extract tokens
+    const iframe = document.getElementById('sourceFrame');
+    iframe.src = jokerpublishBase + '?id=2&AdID=' + adID;
+
+    iframe.addEventListener('load', () => {
+      try {
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const iframeForm = iframeDoc.querySelector('form');
+        if (iframeForm) {
+          document.getElementById('hid_pagecontext').value =
+            iframeForm.querySelector('[name="sa_pagecontext"]')?.value || '';
+          document.getElementById('hid_rawcontext').value =
+            iframeForm.querySelector('[name="sa_rawcontext"]')?.value || '';
+          document.getElementById('hid_postbackform').value =
+            iframeForm.querySelector('[name="sa_postbackform"]')?.value || '';
+        }
+      } catch (e) {
+        // Cross-origin – will redirect on submit
+      }
+    });
+
+    const form = document.getElementById('sokForm');
+    const overlay = document.getElementById('policyOverlay');
+
+    // "Vidare" shows policy overlay after validation
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const required = form.querySelectorAll('[required]');
+      let valid = true;
+      required.forEach(field => {
+        if (!field.value || field.value === '0' || field.value === '') {
+          field.style.borderColor = 'var(--cherry-pink)';
+          valid = false;
+        } else {
+          field.style.borderColor = 'rgba(255,255,255,0.15)';
+        }
+      });
+
+      // Validate e-post match
+      const email = document.getElementById('i29');
+      const emailConfirm = document.getElementById('i30');
+      if (email.value && emailConfirm.value && email.value !== emailConfirm.value) {
+        emailConfirm.style.borderColor = 'var(--cherry-pink)';
+        valid = false;
+      }
+
+      if (!valid) return;
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // "Tillbaka" closes overlay
+    document.getElementById('btnBackToForm').addEventListener('click', () => {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    // "Skicka ansökan" – submit to jokerpublish or redirect
+    document.getElementById('btnSubmitFinal').addEventListener('click', () => {
+      const pagecontext = document.getElementById('hid_pagecontext').value;
+      if (pagecontext) {
+        // We have tokens – set form action and submit
+        form.action = jokerpublishBase + '?id=2&AdID=' + adID + '#i8';
+        form.submit();
+      } else {
+        // Fallback: redirect to jokerpublish directly
+        window.location.href = jokerpublishBase + '?id=2&AdID=' + adID;
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+</html>
