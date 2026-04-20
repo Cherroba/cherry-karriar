@@ -4,6 +4,16 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-20 09:30
+- **Begärd av:** Anna Crociani
+- **Ändring:** Lägg till foto på Sixten Göransson med ljus/kontrast-optimering (CSS filter)
+- **Fil(er):** cherry-karriar.html, sixten-goransson.jpg
+
+## 2026-04-20 09:29
+- **Begärd av:** Anna Crociani
+- **Ändring:** Uppdatera citat för Sixten Göransson – ta bort första meningen
+- **Fil(er):** cherry-karriar.html
+
 ## 2026-04-17 08:51
 - **Begärd av:** Anna Crociani
 - **Ändring:** Uppdatera intresseanmälningstext under Lediga tjänster
