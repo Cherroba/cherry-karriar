@@ -4,6 +4,11 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-20 15:00
+- **Begärd av:** Anna Crociani
+- **Ändring:** Uppdaterade citat för Sixten Göransson till ny text, uppdaterade titel till "ChefsCroupier Östersund". Bildändring (31AE5BDB-A49E-4BA0-A086-3A7BCD639E46.jpeg) kunde EJ genomföras – filen finns i Annas personliga OneDrive och är inte åtkomlig automatiskt. Bilden behöver kopieras manuellt till Karriar-mappen och `sixten-goransson.jpg` ersättas.
+- **Fil(er):** cherry-karriar.html, changelog-auto.md
+
 ## 2026-04-20 09:30
 - **Begärd av:** Anna Crociani
 - **Ändring:** Lägg till foto på Sixten Göransson med ljus/kontrast-optimering (CSS filter)
