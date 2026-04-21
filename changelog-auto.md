@@ -4,6 +4,11 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-21 09:55
+- **Begärd av:** Nadia Dagelin
+- **Ändring:** Ersatte glitter-emojin (✨) i "Varför Cherry?"-sektionens arc-node (data-index="4") med bilden Star.png
+- **Fil(er):** cherry-karriar.html
+
 ## 2026-04-20 15:30
 - **Begärd av:** Anna Crociani
 - **Ändring:** Uppdaterade bilden på Sixten Göransson (sixten-goransson.jpeg manuellt inlagd av Robert). HTML-referens uppdaterad från .jpg till .jpeg.
