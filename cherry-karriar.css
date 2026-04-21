@@ -821,10 +821,9 @@ ul, ol {
   border: 2px solid rgba(255, 255, 255, 0.1);
 }
 .arc-node-img {
-  width: 80%;
-  height: 80%;
+  width: 90%;
+  height: 90%;
   object-fit: contain;
-  border-radius: 50%;
 }
 
 .arc-node.active {
