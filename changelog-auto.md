@@ -4,6 +4,21 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-21 16:10
+- **Begärd av:** Anna Crociani
+- **Ändring:** Lade till testimonial-kort för Vega Mårtensson (Croupier) med citat. Foto (WhatsApp Image 2026-04-21 at 15.56.32.jpeg) kunde EJ läggas in automatiskt – filen finns i Annas personliga OneDrive. Bilden behöver kopieras manuellt till Karriar-mappen och refereras som t.ex. `vega-martensson.jpeg` i photo-placeholder-div:en (data-card="3").
+- **Fil(er):** cherry-karriar.html, changelog-auto.md
+
+## 2026-04-21 12:30
+- **Begärd av:** Anna Crociani
+- **Ändring:** Ersatte hjärt-emojin (data-index="3") med Cherry.png. Roterad 180° med CSS transform så att körsbäret är upprätt (stjälk upp).
+- **Fil(er):** cherry-karriar.html
+
+## 2026-04-21 12:28
+- **Begärd av:** Anna Crociani
+- **Ändring:** Ersatte celebration-emojin (data-index="1") med Chip.png (Cherry-spelmarker, transparent bakgrund), i samma storlek som övriga arc-noder.
+- **Fil(er):** cherry-karriar.html
+
 ## 2026-04-21 10:30
 - **Begärd av:** Nadia Dagelin
 - **Ändring:** Tog bort vit bakgrund från Star.png – konverterad från JPEG till PNG med transparent bakgrund (RGBA) så att endast symbolen syns
