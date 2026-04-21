@@ -4,6 +4,11 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-21 16:25
+- **Begärd av:** Anna Crociani
+- **Ändring:** Tog bort testimonial-kortet för Anna Lindberg (Produktchef). Uppdaterade data-card-index för kvarvarande kort (Erik→0, Sixten→1, Vega→2) och minskade team-dots från 4 till 3.
+- **Fil(er):** cherry-karriar.html, changelog-auto.md
+
 ## 2026-04-21 16:10
 - **Begärd av:** Anna Crociani
 - **Ändring:** Lade till testimonial-kort för Vega Mårtensson (Croupier) med citat. Foto (WhatsApp Image 2026-04-21 at 15.56.32.jpeg) kunde EJ läggas in automatiskt – filen finns i Annas personliga OneDrive. Bilden behöver kopieras manuellt till Karriar-mappen och refereras som t.ex. `vega-martensson.jpeg` i photo-placeholder-div:en (data-card="3").
