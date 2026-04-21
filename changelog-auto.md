@@ -4,6 +4,11 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-21 10:30
+- **Begärd av:** Nadia Dagelin
+- **Ändring:** Tog bort vit bakgrund från Star.png – konverterad från JPEG till PNG med transparent bakgrund (RGBA) så att endast symbolen syns
+- **Fil(er):** Star.png
+
 ## 2026-04-21 09:55
 - **Begärd av:** Nadia Dagelin
 - **Ändring:** Ersatte glitter-emojin (✨) i "Varför Cherry?"-sektionens arc-node (data-index="4") med bilden Star.png
