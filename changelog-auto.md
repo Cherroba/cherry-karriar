@@ -4,6 +4,16 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-21 16:45
+- **Begärd av:** Anna Crociani
+- **Ändring:** Ersatte jordklots-emojin (arc-node data-index="2") med Astro.png (astronaut-bild).
+- **Fil(er):** cherry-karriar.html
+
+## 2026-04-21 16:44
+- **Begärd av:** Anna Crociani (manuellt tillagd av Robert)
+- **Ändring:** Lade in foto på Vega Mårtensson (Vega.jpeg) i hennes testimonial-kort (data-card="2").
+- **Fil(er):** cherry-karriar.html
+
 ## 2026-04-21 16:25
 - **Begärd av:** Anna Crociani
 - **Ändring:** Tog bort testimonial-kortet för Anna Lindberg (Produktchef). Uppdaterade data-card-index för kvarvarande kort (Erik→0, Sixten→1, Vega→2) och minskade team-dots från 4 till 3.
