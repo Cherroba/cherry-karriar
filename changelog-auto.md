@@ -4,6 +4,11 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-22 07:52
+- **Begärd av:** Anna Crociani
+- **Ändring:** Tog bort sista delen av meningen – "– och kanske passer även för dig" – i videosektionens undertext
+- **Fil(er):** cherry-karriar.html
+
 ## 2026-04-21 16:45
 - **Begärd av:** Anna Crociani
 - **Ändring:** Ersatte jordklots-emojin (arc-node data-index="2") med Astro.png (astronaut-bild).
