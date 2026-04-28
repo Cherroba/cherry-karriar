@@ -4,6 +4,16 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-28 14:30
+- **Begärd av:** Anna Crociani (manuellt ikapphämtning, jobbet missade i ondags)
+- **Ändring:** Ta bort "Alltid tillsammans." från arc-värdet "Jobba. Ha kul. Repeat."
+- **Fil(er):** cherry-karriar.js
+
+## 2026-04-28 14:30
+- **Begärd av:** Anna Crociani (manuellt ikapphämtning, jobbet missade i ondags)
+- **Ändring:** Uppdatera "Från ny → pro"-texten till "Lär dig snabbt. Vi ger dig kunskapen - du sätter takten."
+- **Fil(er):** cherry-karriar.js
+
 ## 2026-04-27 10:00
 - **Begärd av:** Systemet
 - **Ändring:** Teams-sökning misslyckades (timeout) – kunde inte kontrollera om nya meddelanden finns. Manuell kontroll kan behövas.

@@ -524,8 +524,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (valuesContainer && valuesScene) {
     const arcValues = [
-      { title: 'Fr\u00e5n ny \u2192 pro', desc: 'L\u00e4r dig snabbt. V\u00e4x \u00e4nnu snabbare. Vi ger dig verktygen \u2013 du s\u00e4tter takten.' },
-      { title: 'Jobba. Ha kul. Repeat.', desc: 'Ett team som backar dig. Bra vibes. H\u00f6gt tempo. Alltid tillsammans.' },
+      { title: 'Fr\u00e5n ny \u2192 pro', desc: 'L\u00e4r dig snabbt. Vi ger dig kunskapen - du s\u00e4tter takten.' },
+      { title: 'Jobba. Ha kul. Repeat.', desc: 'Ett team som backar dig. Bra vibes. H\u00f6gt tempo.' },
       { title: 'M\u00e5nga m\u00f6jligheter', desc: 'Olika st\u00e4der. Olika pass. Flexibilitet n\u00e4r livet kr\u00e4ver det.' },
       { title: '100% tryggt', desc: 'Schyssta villkor. R\u00e4tt l\u00f6n. Inga konstigheter \u2013 bara trygghet.' },
       { title: 'Aldrig en tr\u00e5kig kv\u00e4ll', desc: 'Nya m\u00e4nniskor. Nya platser. Du \u00e4r mitt i allt som h\u00e4nder.' },
