@@ -4,6 +4,11 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-27 10:00
+- **Begärd av:** Systemet
+- **Ändring:** Teams-sökning misslyckades (timeout) – kunde inte kontrollera om nya meddelanden finns. Manuell kontroll kan behövas.
+- **Fil(er):** –
+
 ## 2026-04-22 07:52
 - **Begärd av:** Anna Crociani
 - **Ändring:** Tog bort sista delen av meningen – "– och kanske passer även för dig" – i videosektionens undertext
