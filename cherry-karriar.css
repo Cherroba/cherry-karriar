@@ -748,8 +748,12 @@ ul, ol {
 
 /* --- Values / EVP Rainbow Arc Section --- */
 .values-scroll-container {
-  height: 400vh;
+  height: 150vh;
   position: relative;
+}
+.values-scene .arc-node,
+.scroll-dots .scroll-dot {
+  cursor: pointer;
 }
 
 .values-sticky {

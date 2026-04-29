@@ -4,6 +4,41 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-29 17:00
+- **Begärd av:** Anna Crociani (manuell ikapphämtning – jobbet missade)
+- **Ändring:** Varför Cherry-sektionen på desktop fungerar nu som mobil – container reducerad från 400vh till 150vh, första värdet visas direkt vid scroll-in, klick på arc-noder/dottar för att byta värde. Scroll-hint anpassas mellan "Klicka" (desktop) och "Swipa" (mobil).
+- **Fil(er):** cherry-karriar.js, cherry-karriar.css
+
+## 2026-04-29 17:00
+- **Begärd av:** Anna Crociani (manuell ikapphämtning – jobbet missade)
+- **Ändring:** Lade till radbrytning före "Engagemang, Seriositet och Spelglädje..." i lediga-tjanster.html intro-text.
+- **Fil(er):** lediga-tjanster.html
+
+## 2026-04-29 17:00
+- **Begärd av:** Anna Crociani (manuell ikapphämtning – jobbet missade)
+- **Ändring:** Uppdaterade Jobba hos oss-undertexten till "Är du vår nästa stjärna? Kolla in våra lediga tjänster eller skicka in en intresseanmälan – vi hör av oss när rätt roll för dig finns ledig."
+- **Fil(er):** cherry-karriar.html
+
+## 2026-04-29 17:00
+- **Begärd av:** Anna Crociani (manuell ikapphämtning – jobbet missade)
+- **Ändring:** Uppdaterade Möt våra medarbetare-undertexten till "Våra kollegor delar med sig av sina erfarenheter, sin vardag och varför de valt Cherry."
+- **Fil(er):** cherry-karriar.html
+
+## 2026-04-29 17:00
+- **Begärd av:** Anna Crociani (manuell ikapphämtning – jobbet missade)
+- **Ändring:** Uppdaterade alla 5 arc-värden i Varför Cherry: nya titlar och beskrivningar (stavfel rättade: "erafarenhet"→"erfarenhet", "kvalitativutbildning"→"kvalitativ utbildning", "mögligheter"→"möjligheter", "shjysta"→"schyssta").
+- **Fil(er):** cherry-karriar.js
+
+## 2026-04-29 17:00
+- **Begärd av:** Anna Crociani (manuell ikapphämtning – jobbet missade)
+- **Ändring:** Uppdaterade Varför Cherry-undertexten till "Hos oss får du gemenskap, trygghet och flexibilitet – och ett jobb där du får växa samtidigt som du är med där stämningen och upplevelsen finns."
+- **Fil(er):** cherry-karriar.html
+
+## 2026-04-29 17:00
+- **Begärd av:** Anna Crociani (manuell ikapphämtning – jobbet missade)
+- **Ändring:** Uppdaterade hero-texten: "skapar vi energi" → "sprider vi energi" + "och skapar minnesvärda stunder".
+- **Fil(er):** cherry-karriar.html
+
 ## 2026-04-28 14:10
 - **Begärd av:** Anna Crociani
 - **Ändring:** Tog bort radbrytningarna (`<br>`) i Vega Mårtenssons testimonial-citat så att texten flödar i ett stycke.

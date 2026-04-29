@@ -524,11 +524,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (valuesContainer && valuesScene) {
     const arcValues = [
-      { title: 'Fr\u00e5n ny \u2192 pro', desc: 'L\u00e4r dig snabbt. Vi ger dig kunskapen - du s\u00e4tter takten.' },
-      { title: 'Jobba. Ha kul. Repeat.', desc: 'Ett team som backar dig. Bra vibes. H\u00f6gt tempo.' },
-      { title: 'M\u00e5nga m\u00f6jligheter', desc: 'Olika st\u00e4der. Olika pass. Flexibilitet n\u00e4r livet kr\u00e4ver det.' },
-      { title: '100% tryggt', desc: 'Schyssta villkor. R\u00e4tt l\u00f6n. Inga konstigheter \u2013 bara trygghet.' },
-      { title: 'Aldrig en tr\u00e5kig kv\u00e4ll', desc: 'Nya m\u00e4nniskor. Nya platser. Du \u00e4r mitt i allt som h\u00e4nder.' },
+      { title: 'Fr\u00e5n ny \u2013 till pro', desc: 'Ingen tidigare erfarenhet kr\u00e4vs. Vi erbjuder en kvalitativ utbildning.' },
+      { title: 'Jobba. Utvecklas. P\u00e5verka.', desc: 'M\u00f6jlighet att v\u00e4xa och utvecklas med bolaget.' },
+      { title: 'M\u00e5nga m\u00f6jligheter', desc: 'Arbeta i olika st\u00e4der. Flexibilitet vid flytt.' },
+      { title: '100% tryggt', desc: 'Kollektivavtal med schyssta villkor. R\u00e4tt l\u00f6n. Trivsel och trygghet.' },
+      { title: 'Alltid en rolig kv\u00e4ll', desc: 'Nya m\u00e4nniskor. Nya platser. Du \u00e4r mitt i allt som h\u00e4nder.' },
     ];
 
     const arcNodes = document.querySelectorAll('.arc-node');
@@ -631,37 +631,46 @@ document.addEventListener('DOMContentLoaded', () => {
     function onArcScroll() {
       var rect = valuesContainer.getBoundingClientRect();
       var scrolled = -rect.top;
-      var range = valuesContainer.offsetHeight - window.innerHeight;
 
-      if (isMob()) {
-        // Mobile: only show first value when section enters view
-        if (scrolled < 0) {
-          valuesSwipeActive = false;
-          updateArc(-1);
-          return;
-        }
-        if (!valuesSwipeActive) {
-          valuesSwipeActive = true;
-          updateArc(0);
-        }
+      // Both mobile and desktop: show first value when section enters view,
+      // user navigates manually (swipe on mobile, click on desktop)
+      if (scrolled < 0) {
+        valuesSwipeActive = false;
+        updateArc(-1);
         return;
       }
-
-      // Desktop: scroll-driven
-      if (scrolled < 0) { updateArc(-1); return; }
-      if (scrolled > range) return;
-      var progress = scrolled / range;
-      var intro = 0.10;
-      var outro = 0.05;
-      if (progress < intro) { updateArc(-1); return; }
-      var p = (progress - intro) / (1 - intro - outro);
-      var idx = Math.min(Math.floor(p * TOTAL), TOTAL - 1);
-      updateArc(idx);
+      if (!valuesSwipeActive) {
+        valuesSwipeActive = true;
+        updateArc(0);
+      }
     }
 
     initArcPositions();
     window.addEventListener('scroll', onArcScroll, { passive: true });
     window.addEventListener('resize', function() { initArcPositions(); onArcScroll(); });
+
+    // Update scroll-hint text based on viewport (click on desktop, swipe on mobile)
+    if (scrollHintEl) {
+      scrollHintEl.textContent = isMob() ? 'Swipa för att utforska' : 'Klicka för att utforska';
+      window.addEventListener('resize', function() {
+        scrollHintEl.textContent = isMob() ? 'Swipa för att utforska' : 'Klicka för att utforska';
+      });
+    }
+
+    // Click handlers for arc nodes and dots (desktop & mobile)
+    arcNodes.forEach(function(node, i) {
+      node.addEventListener('click', function() {
+        if (!valuesSwipeActive) valuesSwipeActive = true;
+        updateArc(i);
+      });
+    });
+    scrollDots.forEach(function(dot, i) {
+      dot.style.cursor = 'pointer';
+      dot.addEventListener('click', function() {
+        if (!valuesSwipeActive) valuesSwipeActive = true;
+        updateArc(i);
+      });
+    });
 
     // Mobile: swipe handling for values
     if (window.innerWidth <= 768) {
