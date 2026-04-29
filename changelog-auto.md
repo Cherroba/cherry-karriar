@@ -4,6 +4,16 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-28 14:10
+- **Begärd av:** Anna Crociani
+- **Ändring:** Tog bort radbrytningarna (`<br>`) i Vega Mårtenssons testimonial-citat så att texten flödar i ett stycke.
+- **Fil(er):** cherry-karriar.html
+
+## 2026-04-28 14:09
+- **Begärd av:** Anna Crociani
+- **Ändring:** Ersatte tredje testimonialrutan (Erik Johansson, Utvecklare) med Ingrid Korpus, Croupier, samt nytt citat. Inga radbrytningar i texten.
+- **Fil(er):** cherry-karriar.html
+
 ## 2026-04-28 14:30
 - **Begärd av:** Anna Crociani (manuellt ikapphämtning, jobbet missade i ondags)
 - **Ändring:** Ta bort "Alltid tillsammans." från arc-värdet "Jobba. Ha kul. Repeat."
