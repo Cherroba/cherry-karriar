@@ -4,6 +4,11 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-04-30 10:45
+- **Begärd av:** Anna Crociani
+- **Ändring:** Bytte bild på Vega Mårtensson – referens ändrad från Vega.jpeg till "Vega m.jpeg" (manuellt inlagd av Robert).
+- **Fil(er):** cherry-karriar.html, Vega m.jpeg
+
 ## 2026-04-29 17:00
 - **Begärd av:** Anna Crociani (manuell ikapphämtning – jobbet missade)
 - **Ändring:** Varför Cherry-sektionen på desktop fungerar nu som mobil – container reducerad från 400vh till 150vh, första värdet visas direkt vid scroll-in, klick på arc-noder/dottar för att byta värde. Scroll-hint anpassas mellan "Klicka" (desktop) och "Swipa" (mobil).
