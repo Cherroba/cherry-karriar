@@ -218,38 +218,32 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.add('team-fade');
       });
 
-      function onDesktopTeamScroll() {
-        var rect = teamContainerDesktop.getBoundingClientRect();
-        // Lead-in: begin the fade ~0.4 viewport before the section pins
-        var LEAD = window.innerHeight * 0.4;
-        var scrolled = -rect.top + LEAD;
-        var range = teamContainerDesktop.offsetHeight - window.innerHeight + LEAD;
+      var teamSection = teamContainerDesktop.querySelector('.team-section');
 
-        if (scrolled < 0 || scrolled > range) {
+      function onDesktopTeamScroll() {
+        var rect = teamSection.getBoundingClientRect();
+        var ih = window.innerHeight;
+
+        // Not yet entered (section top still well below the viewport)
+        if (rect.top > ih * 0.6) {
           desktopCards.forEach(function(card) {
             card.classList.remove('team-visible', 'team-exit');
           });
           return;
         }
-
-        var progress = scrolled / range; // 0 to 1
-        // 0–0.3: fade in, 0.3–0.85: hold, 0.85–1.0: fade out
-        if (progress < 0.3) {
-          desktopCards.forEach(function(card) {
-            card.classList.add('team-visible');
-            card.classList.remove('team-exit');
-          });
-        } else if (progress > 0.85) {
+        // Mostly past — fade out as section leaves to the top
+        if (rect.top < -ih * 0.5) {
           desktopCards.forEach(function(card) {
             card.classList.remove('team-visible');
             card.classList.add('team-exit');
           });
-        } else {
-          desktopCards.forEach(function(card) {
-            card.classList.add('team-visible');
-            card.classList.remove('team-exit');
-          });
+          return;
         }
+        // In view — visible
+        desktopCards.forEach(function(card) {
+          card.classList.add('team-visible');
+          card.classList.remove('team-exit');
+        });
       }
 
       window.addEventListener('scroll', rafThrottle(onDesktopTeamScroll), { passive: true });
@@ -269,13 +263,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (jobsCta) jobsCta.classList.add('jobs-fade');
 
-      function onDesktopJobsScroll() {
-        var rect = jobsContainerDesktop.getBoundingClientRect();
-        // Lead-in: begin the fade ~0.4 viewport before the section pins
-        var LEAD = window.innerHeight * 0.4;
-        var scrolled = -rect.top + LEAD;
+      var jobsSection = jobsContainerDesktop.querySelector('.jobs-section');
 
-        if (scrolled < 0) {
+      function onDesktopJobsScroll() {
+        var rect = jobsSection.getBoundingClientRect();
+        var ih = window.innerHeight;
+
+        if (rect.top > ih * 0.6) {
           desktopJobCards.forEach(function(card) {
             card.classList.remove('jobs-visible');
           });
@@ -283,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
 
-        // Fade in and stay visible
+        // Fade in and stay visible (no exit — CTA must stay clickable)
         desktopJobCards.forEach(function(card) {
           card.classList.add('jobs-visible');
         });
@@ -363,28 +357,20 @@ document.addEventListener('DOMContentLoaded', () => {
       videoSection.classList.add('video-fade');
 
       function onDesktopVideoScroll() {
-        var rect = videoContainerDesktop.getBoundingClientRect();
-        // Lead-in: begin the fade ~0.4 viewport before the section pins
-        var LEAD = window.innerHeight * 0.4;
-        var scrolled = -rect.top + LEAD;
-        var range = videoContainerDesktop.offsetHeight - window.innerHeight + LEAD;
+        var rect = videoSection.getBoundingClientRect();
+        var ih = window.innerHeight;
 
-        if (scrolled < 0 || scrolled > range) {
+        if (rect.top > ih * 0.6) {
           videoSection.classList.remove('video-visible', 'video-exit');
           return;
         }
-
-        var progress = scrolled / range;
-        if (progress < 0.2) {
-          videoSection.classList.add('video-visible');
-          videoSection.classList.remove('video-exit');
-        } else if (progress > 0.85) {
+        if (rect.top < -ih * 0.5) {
           videoSection.classList.remove('video-visible');
           videoSection.classList.add('video-exit');
-        } else {
-          videoSection.classList.add('video-visible');
-          videoSection.classList.remove('video-exit');
+          return;
         }
+        videoSection.classList.add('video-visible');
+        videoSection.classList.remove('video-exit');
       }
 
       window.addEventListener('scroll', rafThrottle(onDesktopVideoScroll), { passive: true });
@@ -401,12 +387,10 @@ document.addEventListener('DOMContentLoaded', () => {
       socialSection.classList.add('social-fade');
 
       function onDesktopSocialScroll() {
-        var rect = socialContainerDesktop.getBoundingClientRect();
-        // Lead-in: begin the fade ~0.4 viewport before the section pins
-        var LEAD = window.innerHeight * 0.4;
-        var scrolled = -rect.top + LEAD;
+        var rect = socialSection.getBoundingClientRect();
+        var ih = window.innerHeight;
 
-        if (scrolled < 0) {
+        if (rect.top > ih * 0.6) {
           socialSection.classList.remove('social-visible');
           return;
         }

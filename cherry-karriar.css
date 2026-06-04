@@ -457,14 +457,13 @@ ul, ol {
 
 /* --- Video Section (Sticky) --- */
 .video-scroll-container {
-  height: 160vh;
+  height: 100vh;
   position: relative;
 }
 
 .video-section {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  position: relative;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -509,14 +508,13 @@ ul, ol {
 
 /* --- Social Section (Sticky) --- */
 .social-scroll-container {
-  height: 200vh;
+  height: 100vh;
   position: relative;
 }
 
 .social-section {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  position: relative;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -605,14 +603,12 @@ ul, ol {
 
 /* --- Team / Testimonials Section --- */
 .team-scroll-container {
-  height: 170vh;
+  height: 100vh;
   position: relative;
 }
 
 .team-section {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -748,7 +744,7 @@ ul, ol {
 
 /* --- Values / EVP Rainbow Arc Section --- */
 .values-scroll-container {
-  height: 150vh;
+  height: 100vh;
   position: relative;
 }
 .values-scene .arc-node,
@@ -757,9 +753,8 @@ ul, ol {
 }
 
 .values-sticky {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  position: relative;
+  min-height: 100vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -950,14 +945,13 @@ ul, ol {
 
 /* --- Jobs Section --- */
 .jobs-scroll-container {
-  height: 160vh;
+  height: 100vh;
   position: relative;
 }
 
 .jobs-section {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  position: relative;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1312,6 +1306,9 @@ ul, ol {
     touch-action: pan-y;
   }
   .team-section {
+    position: sticky;
+    top: 0;
+    height: 100vh;
     padding: 0 !important;
     padding-top: max(10vh, 90px) !important;
     justify-content: flex-start !important;
@@ -1420,6 +1417,8 @@ ul, ol {
     height: 150svh;
   }
   .jobs-section {
+    position: sticky;
+    top: 0;
     height: 100svh;
     padding-top: max(8vh, 70px) !important;
     justify-content: flex-start !important;
@@ -1475,6 +1474,8 @@ ul, ol {
     height: 200svh;
   }
   .social-section {
+    position: sticky;
+    top: 0;
     height: 100svh;
     padding-top: max(10vh, 80px) !important;
     justify-content: flex-start !important;
