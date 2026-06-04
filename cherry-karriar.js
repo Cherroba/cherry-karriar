@@ -4,6 +4,16 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // --- Scroll handler throttle: coalesce work to one update per frame ---
+  function rafThrottle(fn) {
+    var ticking = false;
+    return function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { fn(); ticking = false; });
+    };
+  }
+
   // --- Shared horizontal swipe helper ---
   // Locks direction early, preventDefault for horizontal to stop page scroll,
   // falls back to native vertical scroll if user swipes up/down.
@@ -89,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
       heroSection.style.filter = 'blur(' + blur + 'px)';
     }
 
-    window.addEventListener('scroll', onHeroScroll, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onHeroScroll), { passive: true });
     onHeroScroll();
   }
 
@@ -126,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  window.addEventListener('scroll', onSectionTextScroll, { passive: true });
+  window.addEventListener('scroll', rafThrottle(onSectionTextScroll), { passive: true });
   onSectionTextScroll();
 
   // --- Back to top button ---
@@ -140,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         backToTopBtn.classList.remove('visible');
       }
     }
-    window.addEventListener('scroll', onBackToTopScroll, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onBackToTopScroll), { passive: true });
     onBackToTopScroll();
 
     backToTopBtn.addEventListener('click', function() {
@@ -210,8 +220,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       function onDesktopTeamScroll() {
         var rect = teamContainerDesktop.getBoundingClientRect();
-        var scrolled = -rect.top;
-        var range = teamContainerDesktop.offsetHeight - window.innerHeight;
+        // Lead-in: begin the fade ~0.4 viewport before the section pins
+        var LEAD = window.innerHeight * 0.4;
+        var scrolled = -rect.top + LEAD;
+        var range = teamContainerDesktop.offsetHeight - window.innerHeight + LEAD;
 
         if (scrolled < 0 || scrolled > range) {
           desktopCards.forEach(function(card) {
@@ -240,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      window.addEventListener('scroll', onDesktopTeamScroll, { passive: true });
+      window.addEventListener('scroll', rafThrottle(onDesktopTeamScroll), { passive: true });
       onDesktopTeamScroll();
     }
   }
@@ -259,8 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       function onDesktopJobsScroll() {
         var rect = jobsContainerDesktop.getBoundingClientRect();
-        var scrolled = -rect.top;
-        var range = jobsContainerDesktop.offsetHeight - window.innerHeight;
+        // Lead-in: begin the fade ~0.4 viewport before the section pins
+        var LEAD = window.innerHeight * 0.4;
+        var scrolled = -rect.top + LEAD;
 
         if (scrolled < 0) {
           desktopJobCards.forEach(function(card) {
@@ -277,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (jobsCta) jobsCta.classList.add('jobs-visible');
       }
 
-      window.addEventListener('scroll', onDesktopJobsScroll, { passive: true });
+      window.addEventListener('scroll', rafThrottle(onDesktopJobsScroll), { passive: true });
       onDesktopJobsScroll();
     }
   }
@@ -330,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (jobsContainer && jobCards.length > 0 && window.innerWidth <= 768) {
     updateJobCard(-1);
-    window.addEventListener('scroll', onJobsScrollMobile, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onJobsScrollMobile), { passive: true });
 
     setupSwipe({
       element: jobsContainer.querySelector('.jobs-section'),
@@ -351,8 +364,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       function onDesktopVideoScroll() {
         var rect = videoContainerDesktop.getBoundingClientRect();
-        var scrolled = -rect.top;
-        var range = videoContainerDesktop.offsetHeight - window.innerHeight;
+        // Lead-in: begin the fade ~0.4 viewport before the section pins
+        var LEAD = window.innerHeight * 0.4;
+        var scrolled = -rect.top + LEAD;
+        var range = videoContainerDesktop.offsetHeight - window.innerHeight + LEAD;
 
         if (scrolled < 0 || scrolled > range) {
           videoSection.classList.remove('video-visible', 'video-exit');
@@ -372,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      window.addEventListener('scroll', onDesktopVideoScroll, { passive: true });
+      window.addEventListener('scroll', rafThrottle(onDesktopVideoScroll), { passive: true });
       onDesktopVideoScroll();
     }
   }
@@ -387,7 +402,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       function onDesktopSocialScroll() {
         var rect = socialContainerDesktop.getBoundingClientRect();
-        var scrolled = -rect.top;
+        // Lead-in: begin the fade ~0.4 viewport before the section pins
+        var LEAD = window.innerHeight * 0.4;
+        var scrolled = -rect.top + LEAD;
 
         if (scrolled < 0) {
           socialSection.classList.remove('social-visible');
@@ -397,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socialSection.classList.add('social-visible');
       }
 
-      window.addEventListener('scroll', onDesktopSocialScroll, { passive: true });
+      window.addEventListener('scroll', rafThrottle(onDesktopSocialScroll), { passive: true });
       onDesktopSocialScroll();
     }
   }
@@ -423,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
       socialSectionMobile.classList.add('social-visible');
     }
 
-    window.addEventListener('scroll', onMobileSocialScroll, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onMobileSocialScroll), { passive: true });
     onMobileSocialScroll();
   }
 
@@ -450,13 +467,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Header background on scroll ---
   const header = document.querySelector('.site-header');
   if (header) {
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', rafThrottle(() => {
       if (window.scrollY > 50) {
         header.style.borderBottomColor = 'rgba(255, 255, 255, 0.08)';
       } else {
         header.style.borderBottomColor = 'rgba(255, 255, 255, 0.05)';
       }
-    }, { passive: true });
+    }), { passive: true });
   }
 
   // --- Testimonial Cards: swipe-driven on mobile ---
@@ -507,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (teamContainer && teamCards.length > 0 && window.innerWidth <= 768) {
     updateTeamCard(-1);
-    window.addEventListener('scroll', onTeamScrollMobile, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onTeamScrollMobile), { passive: true });
 
     setupSwipe({
       element: teamContainer.querySelector('.team-section'),
@@ -646,7 +663,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initArcPositions();
-    window.addEventListener('scroll', onArcScroll, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onArcScroll), { passive: true });
     window.addEventListener('resize', function() { initArcPositions(); onArcScroll(); });
 
     // Update scroll-hint text based on viewport (click on desktop, swipe on mobile)

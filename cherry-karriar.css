@@ -394,7 +394,7 @@ ul, ol {
 
 /* --- Hero Section (Sticky with parallax fade) --- */
 .hero-scroll-wrapper {
-  height: 150vh;
+  height: 130vh;
   position: relative;
 }
 
@@ -457,7 +457,7 @@ ul, ol {
 
 /* --- Video Section (Sticky) --- */
 .video-scroll-container {
-  height: 200vh;
+  height: 160vh;
   position: relative;
 }
 
@@ -605,7 +605,7 @@ ul, ol {
 
 /* --- Team / Testimonials Section --- */
 .team-scroll-container {
-  height: 250vh;
+  height: 170vh;
   position: relative;
 }
 
@@ -950,7 +950,7 @@ ul, ol {
 
 /* --- Jobs Section --- */
 .jobs-scroll-container {
-  height: 250vh;
+  height: 160vh;
   position: relative;
 }
 
