@@ -4,6 +4,16 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // --- Scroll handler throttle: coalesce work to one update per frame ---
+  function rafThrottle(fn) {
+    var ticking = false;
+    return function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { fn(); ticking = false; });
+    };
+  }
+
   // --- Shared horizontal swipe helper ---
   // Locks direction early, preventDefault for horizontal to stop page scroll,
   // falls back to native vertical scroll if user swipes up/down.
@@ -89,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
       heroSection.style.filter = 'blur(' + blur + 'px)';
     }
 
-    window.addEventListener('scroll', onHeroScroll, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onHeroScroll), { passive: true });
     onHeroScroll();
   }
 
@@ -120,13 +130,15 @@ document.addEventListener('DOMContentLoaded', () => {
     var fadeEls = document.querySelectorAll('.section-text-fade');
     fadeEls.forEach(function(el) {
       var rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.85) {
+      // Match the section-fade trigger (0.6) so all titles fade in consistently
+      // when they're actually entering the viewport, instead of pre-faded off-screen.
+      if (rect.top < window.innerHeight * 0.6) {
         el.classList.add('fade-visible');
       }
     });
   }
 
-  window.addEventListener('scroll', onSectionTextScroll, { passive: true });
+  window.addEventListener('scroll', rafThrottle(onSectionTextScroll), { passive: true });
   onSectionTextScroll();
 
   // --- Back to top button ---
@@ -140,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         backToTopBtn.classList.remove('visible');
       }
     }
-    window.addEventListener('scroll', onBackToTopScroll, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onBackToTopScroll), { passive: true });
     onBackToTopScroll();
 
     backToTopBtn.addEventListener('click', function() {
@@ -189,8 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     animatedElements.forEach(el => {
-      // Skip testimonial cards on desktop — handled by scroll-driven fade
-      if (isDesktop && el.classList.contains('testimonial-card')) return;
+      // Skip cards on desktop — they're driven by their own scroll-fade handlers
+      // (testimonial-card → team-fade, job-card → jobs-fade)
+      if (isDesktop && (el.classList.contains('testimonial-card') || el.classList.contains('job-card'))) return;
       observer.observe(el);
     });
   } else {
@@ -208,39 +221,35 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.add('team-fade');
       });
 
-      function onDesktopTeamScroll() {
-        var rect = teamContainerDesktop.getBoundingClientRect();
-        var scrolled = -rect.top;
-        var range = teamContainerDesktop.offsetHeight - window.innerHeight;
+      var teamSection = teamContainerDesktop.querySelector('.team-section');
 
-        if (scrolled < 0 || scrolled > range) {
+      function onDesktopTeamScroll() {
+        var rect = teamSection.getBoundingClientRect();
+        var ih = window.innerHeight;
+
+        // Not yet entered (section top still well below the viewport)
+        if (rect.top > ih * 0.6) {
           desktopCards.forEach(function(card) {
             card.classList.remove('team-visible', 'team-exit');
           });
           return;
         }
-
-        var progress = scrolled / range; // 0 to 1
-        // 0–0.3: fade in, 0.3–0.85: hold, 0.85–1.0: fade out
-        if (progress < 0.3) {
-          desktopCards.forEach(function(card) {
-            card.classList.add('team-visible');
-            card.classList.remove('team-exit');
-          });
-        } else if (progress > 0.85) {
+        // Mostly past — fade out as section leaves to the top
+        if (rect.top < -ih * 0.5) {
           desktopCards.forEach(function(card) {
             card.classList.remove('team-visible');
             card.classList.add('team-exit');
           });
-        } else {
-          desktopCards.forEach(function(card) {
-            card.classList.add('team-visible');
-            card.classList.remove('team-exit');
-          });
+          return;
         }
+        // In view — visible
+        desktopCards.forEach(function(card) {
+          card.classList.add('team-visible');
+          card.classList.remove('team-exit');
+        });
       }
 
-      window.addEventListener('scroll', onDesktopTeamScroll, { passive: true });
+      window.addEventListener('scroll', rafThrottle(onDesktopTeamScroll), { passive: true });
       onDesktopTeamScroll();
     }
   }
@@ -257,12 +266,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (jobsCta) jobsCta.classList.add('jobs-fade');
 
-      function onDesktopJobsScroll() {
-        var rect = jobsContainerDesktop.getBoundingClientRect();
-        var scrolled = -rect.top;
-        var range = jobsContainerDesktop.offsetHeight - window.innerHeight;
+      var jobsSection = jobsContainerDesktop.querySelector('.jobs-section');
 
-        if (scrolled < 0) {
+      function onDesktopJobsScroll() {
+        var rect = jobsSection.getBoundingClientRect();
+        var ih = window.innerHeight;
+
+        if (rect.top > ih * 0.6) {
           desktopJobCards.forEach(function(card) {
             card.classList.remove('jobs-visible');
           });
@@ -270,75 +280,59 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
 
-        // Fade in and stay visible
+        // Fade in and stay visible (no exit — CTA must stay clickable)
         desktopJobCards.forEach(function(card) {
           card.classList.add('jobs-visible');
         });
         if (jobsCta) jobsCta.classList.add('jobs-visible');
       }
 
-      window.addEventListener('scroll', onDesktopJobsScroll, { passive: true });
+      window.addEventListener('scroll', rafThrottle(onDesktopJobsScroll), { passive: true });
       onDesktopJobsScroll();
     }
   }
 
-  // --- Mobile: swipe-driven jobs cards ---
-  var jobsContainer = document.getElementById('jobsContainer');
-  var jobCards = document.querySelectorAll('.job-card[data-job]');
-  var jobsDots = document.querySelectorAll('.jobs-dot');
-  var currentJobCard = -1;
-  var jobsSwipeActive = false;
+  // --- Mobile scroll-snap carousel: wire dots to track current card ---
+  // Uses native CSS scroll-snap for swipe/scroll; IntersectionObserver
+  // marks the dot of whichever card is currently centered in the strip.
+  function wireCarouselDots(carouselEl, cardSel, dotSel) {
+    if (!carouselEl) return;
+    var cards = carouselEl.querySelectorAll(cardSel);
+    var dots = document.querySelectorAll(dotSel);
+    if (!cards.length || !dots.length || !('IntersectionObserver' in window)) return;
 
-  function updateJobCard(index) {
-    if (index === currentJobCard) return;
-    currentJobCard = index;
+    function setActive(idx) {
+      dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+    }
 
-    jobCards.forEach(function(card, i) {
-      card.classList.remove('card-active', 'card-exit');
-      if (index >= 0) {
-        if (i === index) {
-          card.classList.add('card-active');
-        } else if (i < index) {
-          card.classList.add('card-exit');
-        }
+    var io = new IntersectionObserver(function(entries) {
+      // Pick the most-visible entry this tick
+      var best = null;
+      entries.forEach(function(e) {
+        if (!best || e.intersectionRatio > best.intersectionRatio) best = e;
+      });
+      if (best && best.intersectionRatio >= 0.6) {
+        var idx = Array.prototype.indexOf.call(cards, best.target);
+        if (idx >= 0) setActive(idx);
       }
+    }, { root: carouselEl, threshold: [0.6, 0.9] });
+
+    cards.forEach(function(c) { io.observe(c); });
+
+    // Click a dot → scroll to the matching card
+    dots.forEach(function(dot, i) {
+      dot.style.cursor = 'pointer';
+      dot.addEventListener('click', function() {
+        var card = cards[i];
+        if (card) card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      });
     });
 
-    jobsDots.forEach(function(dot, i) {
-      dot.classList.toggle('active', index >= 0 && i === index);
-    });
+    setActive(0);
   }
 
-  // Show first card when section scrolls into view, enable swipe
-  function onJobsScrollMobile() {
-    if (!jobsContainer || window.innerWidth > 768) return;
-    var rect = jobsContainer.getBoundingClientRect();
-    var scrolled = -rect.top;
-
-    if (scrolled < 0) {
-      jobsSwipeActive = false;
-      updateJobCard(-1);
-      return;
-    }
-
-    // Show first card once in view
-    if (!jobsSwipeActive) {
-      jobsSwipeActive = true;
-      updateJobCard(0);
-    }
-  }
-
-  if (jobsContainer && jobCards.length > 0 && window.innerWidth <= 768) {
-    updateJobCard(-1);
-    window.addEventListener('scroll', onJobsScrollMobile, { passive: true });
-
-    setupSwipe({
-      element: jobsContainer.querySelector('.jobs-section'),
-      isActive: function() { return jobsSwipeActive; },
-      getIndex: function() { return currentJobCard; },
-      total: function() { return jobCards.length; },
-      onChange: updateJobCard
-    });
+  if (window.innerWidth <= 768) {
+    wireCarouselDots(document.querySelector('.jobs-preview'), '.job-card[data-job]', '.jobs-dot');
   }
 
   // --- Desktop: scroll-driven video fade in/out ---
@@ -350,81 +344,45 @@ document.addEventListener('DOMContentLoaded', () => {
       videoSection.classList.add('video-fade');
 
       function onDesktopVideoScroll() {
-        var rect = videoContainerDesktop.getBoundingClientRect();
-        var scrolled = -rect.top;
-        var range = videoContainerDesktop.offsetHeight - window.innerHeight;
+        var rect = videoSection.getBoundingClientRect();
+        var ih = window.innerHeight;
 
-        if (scrolled < 0 || scrolled > range) {
+        if (rect.top > ih * 0.6) {
           videoSection.classList.remove('video-visible', 'video-exit');
           return;
         }
-
-        var progress = scrolled / range;
-        if (progress < 0.2) {
-          videoSection.classList.add('video-visible');
-          videoSection.classList.remove('video-exit');
-        } else if (progress > 0.85) {
+        if (rect.top < -ih * 0.5) {
           videoSection.classList.remove('video-visible');
           videoSection.classList.add('video-exit');
-        } else {
-          videoSection.classList.add('video-visible');
-          videoSection.classList.remove('video-exit');
+          return;
         }
+        videoSection.classList.add('video-visible');
+        videoSection.classList.remove('video-exit');
       }
 
-      window.addEventListener('scroll', onDesktopVideoScroll, { passive: true });
+      window.addEventListener('scroll', rafThrottle(onDesktopVideoScroll), { passive: true });
       onDesktopVideoScroll();
     }
   }
 
-  // --- Desktop: scroll-driven social fade in (no fade out — last section) ---
-  if (isDesktop) {
-    var socialContainerDesktop = document.getElementById('socialContainer');
-    var socialSection = document.querySelector('.social-section');
+  // --- Social fade in (works for both desktop and mobile — section is
+  //     normal-flow on mobile too, so the same section-rect trigger applies) ---
+  var socialSection = document.querySelector('.social-section');
+  if (socialSection) {
+    socialSection.classList.add('social-fade');
 
-    if (socialContainerDesktop && socialSection) {
-      socialSection.classList.add('social-fade');
-
-      function onDesktopSocialScroll() {
-        var rect = socialContainerDesktop.getBoundingClientRect();
-        var scrolled = -rect.top;
-
-        if (scrolled < 0) {
-          socialSection.classList.remove('social-visible');
-          return;
-        }
-
-        socialSection.classList.add('social-visible');
-      }
-
-      window.addEventListener('scroll', onDesktopSocialScroll, { passive: true });
-      onDesktopSocialScroll();
-    }
-  }
-
-
-  // --- Mobile: scroll-driven social fade in ---
-  var socialContainerMobile = document.getElementById('socialContainer');
-  var socialSectionMobile = document.querySelector('.social-section');
-
-  if (socialContainerMobile && socialSectionMobile && window.innerWidth <= 768) {
-    socialSectionMobile.classList.add('social-fade');
-
-    function onMobileSocialScroll() {
-      if (window.innerWidth > 768) return;
-      var rect = socialContainerMobile.getBoundingClientRect();
-      var scrolled = -rect.top;
-
-      if (scrolled < 0) {
-        socialSectionMobile.classList.remove('social-visible');
+    function onSocialScroll() {
+      var rect = socialSection.getBoundingClientRect();
+      var ih = window.innerHeight;
+      if (rect.top > ih * 0.6) {
+        socialSection.classList.remove('social-visible');
         return;
       }
-
-      socialSectionMobile.classList.add('social-visible');
+      socialSection.classList.add('social-visible');
     }
 
-    window.addEventListener('scroll', onMobileSocialScroll, { passive: true });
-    onMobileSocialScroll();
+    window.addEventListener('scroll', rafThrottle(onSocialScroll), { passive: true });
+    onSocialScroll();
   }
 
   // --- Smooth Scroll for Anchor Links ---
@@ -450,72 +408,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Header background on scroll ---
   const header = document.querySelector('.site-header');
   if (header) {
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', rafThrottle(() => {
       if (window.scrollY > 50) {
         header.style.borderBottomColor = 'rgba(255, 255, 255, 0.08)';
       } else {
         header.style.borderBottomColor = 'rgba(255, 255, 255, 0.05)';
       }
-    }, { passive: true });
+    }), { passive: true });
   }
 
-  // --- Testimonial Cards: swipe-driven on mobile ---
-  var teamContainer = document.getElementById('teamContainer');
-  var teamCards = document.querySelectorAll('.testimonial-card[data-card]');
-  var teamDots = document.querySelectorAll('.team-dot');
-  var currentTeamCard = -1;
-  var teamSwipeActive = false;
-
-  function updateTeamCard(index) {
-    if (index === currentTeamCard) return;
-    currentTeamCard = index;
-
-    teamCards.forEach(function(card, i) {
-      card.classList.remove('card-active', 'card-exit');
-      if (index >= 0) {
-        if (i === index) {
-          card.classList.add('card-active');
-        } else if (i < index) {
-          card.classList.add('card-exit');
-        }
-      }
-    });
-
-    teamDots.forEach(function(dot, i) {
-      dot.classList.toggle('active', index >= 0 && i === index);
-    });
-  }
-
-  // Show first card when section scrolls into view, enable swipe
-  function onTeamScrollMobile() {
-    if (!teamContainer || window.innerWidth > 768) return;
-    var rect = teamContainer.getBoundingClientRect();
-    var scrolled = -rect.top;
-
-    if (scrolled < 0) {
-      teamSwipeActive = false;
-      updateTeamCard(-1);
-      return;
-    }
-
-    // Show first card once in view
-    if (!teamSwipeActive) {
-      teamSwipeActive = true;
-      updateTeamCard(0);
-    }
-  }
-
-  if (teamContainer && teamCards.length > 0 && window.innerWidth <= 768) {
-    updateTeamCard(-1);
-    window.addEventListener('scroll', onTeamScrollMobile, { passive: true });
-
-    setupSwipe({
-      element: teamContainer.querySelector('.team-section'),
-      isActive: function() { return teamSwipeActive; },
-      getIndex: function() { return currentTeamCard; },
-      total: function() { return teamCards.length; },
-      onChange: updateTeamCard
-    });
+  // --- Mobile testimonials carousel dots (shares wireCarouselDots above) ---
+  if (window.innerWidth <= 768) {
+    wireCarouselDots(document.querySelector('.team-grid'), '.testimonial-card[data-card]', '.team-dot');
   }
 
   // --- Rainbow Arc Values Section ---
@@ -544,14 +448,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Desktop: arc positions
     function arcPosition(index) {
       var cx = valuesScene.offsetWidth / 2;
-      var cy = valuesScene.offsetHeight * 0.60;
+      var cy = valuesScene.offsetHeight * 0.45;
       var rx = 260, ry = 260;
       var angleDeg = 180 - (180 * index / (TOTAL - 1));
       var rad = angleDeg * Math.PI / 180;
       return { x: cx + rx * Math.cos(rad), y: cy - ry * Math.sin(rad) };
     }
     function desktopCenter() {
-      return { x: valuesScene.offsetWidth / 2, y: valuesScene.offsetHeight * 0.38 };
+      return { x: valuesScene.offsetWidth / 2, y: valuesScene.offsetHeight * 0.25 };
     }
 
     // Mobile: horizontal row with gentle arc
@@ -646,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initArcPositions();
-    window.addEventListener('scroll', onArcScroll, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onArcScroll), { passive: true });
     window.addEventListener('resize', function() { initArcPositions(); onArcScroll(); });
 
     // Update scroll-hint text based on viewport (click on desktop, swipe on mobile)
