@@ -130,7 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
     var fadeEls = document.querySelectorAll('.section-text-fade');
     fadeEls.forEach(function(el) {
       var rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.85) {
+      // Match the section-fade trigger (0.6) so all titles fade in consistently
+      // when they're actually entering the viewport, instead of pre-faded off-screen.
+      if (rect.top < window.innerHeight * 0.6) {
         el.classList.add('fade-visible');
       }
     });
