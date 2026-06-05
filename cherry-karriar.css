@@ -628,9 +628,7 @@ ul, ol {
 
 .testimonial-card {
   position: relative;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%),
-    var(--cherry-bg-dark);
+  background: var(--cherry-card-bg);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 40px 32px 32px;
@@ -1014,9 +1012,7 @@ ul, ol {
 
 .job-card {
   position: relative;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%),
-    var(--cherry-bg-dark);
+  background: var(--cherry-card-bg);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 32px 28px 28px;
