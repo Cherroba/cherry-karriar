@@ -445,17 +445,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function isMob() { return window.innerWidth <= 768; }
 
+    // Adaptive arc radius: scales with scene size so the arc apex never
+    // overlaps the heading above on shorter (laptop) viewports.
+    function arcRadius() {
+      var sceneH = valuesScene.offsetHeight;
+      var sceneW = valuesScene.offsetWidth;
+      // Vertical room: arc apex must sit at cy - ry within the scene, so ry
+      // can't exceed cy ≈ sceneH * 0.45 minus a small top-margin (12px).
+      var maxByHeight = Math.max(140, sceneH * 0.45 - 12);
+      // Horizontal room: arc spans 2*rx; cap to half the scene width.
+      var maxByWidth = sceneW * 0.45;
+      return Math.min(260, maxByHeight, maxByWidth);
+    }
+
     // Desktop: arc positions
     function arcPosition(index) {
       var cx = valuesScene.offsetWidth / 2;
-      var cy = valuesScene.offsetHeight * 0.45;
-      var rx = 260, ry = 260;
+      var r = arcRadius();
+      var cy = Math.max(r + 12, valuesScene.offsetHeight * 0.45);
       var angleDeg = 180 - (180 * index / (TOTAL - 1));
       var rad = angleDeg * Math.PI / 180;
-      return { x: cx + rx * Math.cos(rad), y: cy - ry * Math.sin(rad) };
+      // Sync the .arc-path visual outline with the computed radius
+      var arcPath = document.getElementById('arcPath');
+      if (arcPath) {
+        arcPath.style.width = (r * 2) + 'px';
+        arcPath.style.height = r + 'px';
+        arcPath.style.borderRadius = r + 'px ' + r + 'px 0 0';
+        arcPath.style.bottom = ((valuesScene.offsetHeight - cy) / valuesScene.offsetHeight * 100) + '%';
+      }
+      return { x: cx + r * Math.cos(rad), y: cy - r * Math.sin(rad) };
     }
     function desktopCenter() {
-      return { x: valuesScene.offsetWidth / 2, y: valuesScene.offsetHeight * 0.25 };
+      // Active node sits above the resting arc; scale proportionally
+      var sceneH = valuesScene.offsetHeight;
+      var r = arcRadius();
+      var cy = Math.max(r + 12, sceneH * 0.45);
+      // Active position: 22% of scene above the resting arc center,
+      // but clamp so it never goes above the heading area.
+      return { x: valuesScene.offsetWidth / 2, y: Math.max(36, cy - sceneH * 0.22) };
     }
 
     // Mobile: horizontal row with gentle arc
