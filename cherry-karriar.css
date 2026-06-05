@@ -1415,7 +1415,6 @@ ul, ol {
     padding: 8px 20px;
     margin: 0 -20px;
     height: auto;
-    touch-action: pan-x;
   }
   .team-grid::-webkit-scrollbar,
   .jobs-preview::-webkit-scrollbar { display: none; }
