@@ -627,12 +627,33 @@ ul, ol {
 }
 
 .testimonial-card {
-  background: var(--cherry-card-bg);
-  border: 1px solid var(--cherry-card-border);
-  border-radius: var(--cherry-radius-lg);
-  padding: 32px;
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%),
+    var(--cherry-bg-dark);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 40px 32px 32px;
   text-align: center;
-  transition: transform var(--cherry-transition), box-shadow var(--cherry-transition);
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+/* Subtle pink accent at top edge for warmth */
+.testimonial-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 0, 89, 0.5),
+    transparent);
 }
 
 /* Desktop scroll-driven fade for testimonials */
@@ -664,19 +685,27 @@ ul, ol {
 
 .testimonial-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 0, 89, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.4),
+    0 0 32px rgba(255, 0, 89, 0.15);
 }
 
 .testimonial-photo {
-  width: 140px;
-  height: 140px;
-  border-radius: var(--cherry-radius-lg);
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
   margin: 0 auto 24px;
   overflow: hidden;
   background: linear-gradient(135deg, var(--cherry-bg-light), var(--cherry-pink-glow));
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow:
+    0 0 0 2px rgba(255, 0, 89, 0.35),
+    0 0 0 5px rgba(255, 255, 255, 0.04),
+    0 10px 28px rgba(255, 0, 89, 0.18);
 }
 
 .testimonial-photo img {
@@ -703,37 +732,47 @@ ul, ol {
 .testimonial-card blockquote {
   font-style: italic;
   font-size: 1rem;
-  color: var(--cherry-text-muted);
+  color: rgba(255, 255, 255, 0.78);
   line-height: 1.7;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   position: relative;
-  padding-top: 20px;
+  padding-top: 28px;
 }
 
 .testimonial-card blockquote::before {
   content: '\201C';
   position: absolute;
-  top: -10px;
+  top: -8px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 4rem;
+  font-size: 4.5rem;
   color: var(--cherry-pink);
-  opacity: 0.4;
+  opacity: 0.55;
   line-height: 1;
   font-style: normal;
+  font-family: Georgia, 'Times New Roman', serif;
+  text-shadow: 0 0 24px rgba(255, 0, 89, 0.3);
+}
+
+.testimonial-info {
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .testimonial-info strong {
   display: block;
   font-size: 1.05rem;
   font-weight: 700;
+  letter-spacing: 0.01em;
   margin-bottom: 4px;
 }
 
 .testimonial-info span {
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   color: var(--cherry-pink);
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
 /* Dots hidden on desktop */
@@ -795,7 +834,7 @@ ul, ol {
   width: 520px;
   height: 260px;
   left: 50%;
-  bottom: 38%;
+  bottom: 53%;
   transform: translateX(-50%);
   border: 2px solid rgba(255, 0, 89, 0.1);
   border-bottom: none;
@@ -847,7 +886,7 @@ ul, ol {
 .center-text {
   position: absolute;
   left: 50%;
-  bottom: 12%;
+  bottom: 25%;
   transform: translateX(-50%);
   text-align: center;
   width: 420px;
@@ -871,7 +910,7 @@ ul, ol {
 
 .scroll-dots {
   position: absolute;
-  bottom: 5vh;
+  bottom: 15vh;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -895,7 +934,7 @@ ul, ol {
 
 .scroll-hint {
   position: absolute;
-  bottom: 2vh;
+  bottom: 12vh;
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.7rem;
@@ -914,7 +953,9 @@ ul, ol {
 
 /* Values mobile overrides */
 @media (max-width: 768px) {
-  .values-scroll-container { height: 150svh; }
+  /* Values uses swipe (not scroll) on mobile, so only a small pin
+     buffer is needed to keep the section put during the gesture. */
+  .values-scroll-container { height: 110svh; }
   .values-heading { margin-top: 10vh; }
   .values-heading p { font-size: 0.9rem; }
   .arc-path { display: none; }
@@ -972,39 +1013,65 @@ ul, ol {
 }
 
 .job-card {
-  background: var(--cherry-card-bg);
-  border: 1px solid var(--cherry-card-border);
-  border-radius: var(--cherry-radius-lg);
-  padding: 28px;
-  transition: transform var(--cherry-transition), border-color var(--cherry-transition);
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%),
+    var(--cherry-bg-dark);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px 28px 28px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+/* Subtle pink accent at top edge — matches testimonial cards */
+.job-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 0, 89, 0.5),
+    transparent);
 }
 
 .job-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 0, 89, 0.3);
+  transform: translateY(-6px);
+  border-color: rgba(255, 0, 89, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.4),
+    0 0 32px rgba(255, 0, 89, 0.15);
 }
 
 .job-card-location {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--cherry-pink);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
+  letter-spacing: 0.12em;
+  margin-bottom: 10px;
 }
 
 .job-card h3 {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   line-height: 1.3;
+  letter-spacing: 0.01em;
 }
 
 .job-card p {
-  font-size: 0.9rem;
-  color: var(--cherry-text-muted);
-  line-height: 1.6;
-  margin-bottom: 20px;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.65;
+  margin-bottom: 24px;
 }
 
 .job-card-link {
@@ -1013,16 +1080,25 @@ ul, ol {
   font-size: 0.9rem;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  transition: gap var(--cherry-transition);
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  width: 100%;
+  transition: gap var(--cherry-transition), color var(--cherry-transition);
 }
 
 .job-card-link:hover {
-  gap: 10px;
+  gap: 12px;
+  color: #fff;
 }
 
 .job-card-link::after {
   content: '\2192';
+  transition: transform var(--cherry-transition);
+}
+
+.job-card-link:hover::after {
+  transform: translateX(2px);
 }
 
 /* Desktop scroll-driven fade for job cards */
@@ -1120,6 +1196,14 @@ ul, ol {
   margin-left: auto;
   margin-right: auto;
   padding: 0 24px;
+  overflow: hidden;
+}
+/* Constrain the Elfsight widget so it can never overflow narrow viewports */
+.tiktok-feed > div,
+.tiktok-feed iframe {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto;
 }
 
 /* --- Footer --- */
@@ -1224,10 +1308,6 @@ ul, ol {
   .team-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .value-card {
-    flex: 0 0 calc(33.333% - 16px);
-  }
 }
 
 /* Responsive video: desktop vs mobile */
@@ -1296,54 +1376,65 @@ ul, ol {
     font-size: clamp(2rem, 8vw, 2.8rem);
   }
 
-  .team-scroll-container {
-    height: 150svh;
-  }
-  /* Let browser handle vertical scroll natively, but give horizontal swipes to JS */
-  .team-section,
-  .jobs-section,
+  /* Values arc keeps its swipe-target; team/jobs use native scroll-snap */
   .values-sticky {
     touch-action: pan-y;
   }
-  .team-section {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    padding: 0 !important;
-    padding-top: max(10vh, 90px) !important;
+
+  /* All scroll wrappers fit their content on mobile — gives consistent
+     section-to-section spacing instead of inheriting the desktop dead-zones. */
+  .team-scroll-container,
+  .jobs-scroll-container,
+  .video-scroll-container,
+  .social-scroll-container {
+    height: auto;
+  }
+
+  /* All sections render in normal flow with their natural height and
+     visible overflow so cards, dots, and TikTok embed can never be clipped. */
+  .team-section,
+  .jobs-section,
+  .social-section {
+    position: relative;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    padding: 64px 0 72px !important;
     justify-content: flex-start !important;
   }
-  .team-section .container {
+  .team-section .container,
+  .jobs-section .container,
+  .social-section .container {
     width: 100%;
     padding: 0 20px;
   }
-  .team-grid {
-    position: relative;
-    display: block;
-    height: 420px;
-    overflow: hidden;
+  /* Horizontal scroll-snap carousel: native swipe + scroll, no JS needed */
+  .team-grid,
+  .jobs-preview {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 8px 20px;
+    margin: 0 -20px;
+    height: auto;
+    touch-action: pan-x;
   }
-  .team-grid .testimonial-card {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    opacity: 0;
-    transform: translate3d(60px, 0, 0);
-    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    pointer-events: none;
-    will-change: transform, opacity;
-    backface-visibility: hidden;
-  }
-  .team-grid .testimonial-card.card-active {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
+  .team-grid::-webkit-scrollbar,
+  .jobs-preview::-webkit-scrollbar { display: none; }
+
+  .team-grid .testimonial-card,
+  .jobs-preview .job-card {
+    flex: 0 0 calc(100% - 40px);
+    scroll-snap-align: center;
+    position: static;
     pointer-events: auto;
-  }
-  .team-grid .testimonial-card.card-exit {
-    opacity: 0;
-    transform: translate3d(-60px, 0, 0);
+    /* Let .animate-on-scroll (opacity 0 → 1 via IntersectionObserver) drive
+       the entrance fade — don't override opacity/transform here. */
   }
   .team-dots {
     display: flex;
@@ -1382,28 +1473,16 @@ ul, ol {
     transform: scale(1.3);
   }
 
-  .value-card {
-    flex: 0 0 calc(70% - 12px);
-    min-width: 240px;
-  }
-
-  /* Jobs: sticky scroll with cards, CTA inside sticky on mobile */
-  .jobs-cta-wrapper {
-    display: none !important;
-  }
-  .jobs-cta-mobile {
-    display: none !important;
-  }
+  /* Jobs CTA: normal flow below the carousel on mobile */
+  .jobs-cta-wrapper { display: none !important; }
+  .jobs-cta-mobile { display: none !important; }
   .jobs-cta-desktop {
     display: flex !important;
-    position: absolute;
-    bottom: max(5vh, 40px);
-    left: 24px;
-    right: 24px;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    z-index: 2;
+    margin-top: 32px;
+    padding: 0 20px;
   }
   .jobs-cta-desktop .btn-primary,
   .jobs-cta-desktop .btn-outline {
@@ -1413,54 +1492,10 @@ ul, ol {
     padding: 12px 24px;
     font-size: 0.9rem;
   }
-  .jobs-scroll-container {
-    height: 150svh;
-  }
-  .jobs-section {
-    position: sticky;
-    top: 0;
-    height: 100svh;
-    padding-top: max(8vh, 70px) !important;
-    justify-content: flex-start !important;
-  }
-  .jobs-preview {
-    position: relative;
-    display: block;
-    height: 240px;
-    overflow: hidden;
-    margin: 0;
-  }
-  .jobs-preview .job-card {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    opacity: 0;
-    transform: translate3d(60px, 0, 0);
-    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    pointer-events: none;
-    will-change: transform, opacity;
-    backface-visibility: hidden;
-  }
-  .jobs-preview .job-card.card-active {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-    pointer-events: auto;
-  }
-  .jobs-preview .job-card.card-exit {
-    opacity: 0;
-    transform: translate3d(-60px, 0, 0);
-  }
-
-  /* Video: normal scroll on mobile (not sticky — fullscreen on play) */
-  .video-scroll-container {
-    height: auto;
-  }
+  /* Video section also fits content on mobile (no sticky — fullscreen on play) */
   .video-section {
     position: relative;
-    height: auto;
-    padding: 64px 20px !important;
+    padding: 64px 20px 72px !important;
     justify-content: flex-start !important;
     overflow: visible;
   }
@@ -1469,19 +1504,12 @@ ul, ol {
     padding: 0;
   }
 
-  /* Social: sticky on mobile */
-  .social-scroll-container {
-    height: 200svh;
-  }
-  .social-section {
-    position: sticky;
-    top: 0;
-    height: 100svh;
-    padding-top: max(10vh, 80px) !important;
-    justify-content: flex-start !important;
-  }
   .social-icons {
     gap: 16px;
+  }
+  /* Space the TikTok embed away from the footer */
+  .tiktok-feed {
+    margin-bottom: 24px;
   }
 
   .footer-nav {
@@ -1523,7 +1551,8 @@ ul, ol {
     height: 110px;
   }
 
-  .value-card {
-    flex: 0 0 calc(80% - 12px);
+  .testimonial-card,
+  .job-card {
+    padding: 24px;
   }
 }
