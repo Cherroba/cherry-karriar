@@ -508,19 +508,18 @@ ul, ol {
 
 /* --- Social Section (Sticky) --- */
 .social-scroll-container {
-  height: 100vh;
+  height: auto;
   position: relative;
 }
 
 .social-section {
   position: relative;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
-  padding-top: max(12vh, 90px);
+  padding: max(12vh, 90px) 0 48px;
   background: var(--cherry-bg);
 }
 
@@ -1503,9 +1502,9 @@ ul, ol {
   .social-icons {
     gap: 16px;
   }
-  /* Space the TikTok embed away from the footer */
-  .tiktok-feed {
-    margin-bottom: 24px;
+  /* Tighter spacing between social section and footer */
+  .social-section {
+    padding: 64px 0 24px !important;
   }
 
   .footer-nav {
