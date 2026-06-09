@@ -385,34 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
     onSocialScroll();
   }
 
-  // --- Social icons: open native app on mobile, browser elsewhere ---
-  // Each social <a> carries the public https URL on href (so desktop opens in
-  // a new tab as normal) and an app-scheme on data-app. On a phone we try
-  // the app scheme first; if the app isn't installed we fall back to the
-  // browser URL after a short timeout. The visibility check skips the
-  // fallback when the OS successfully switched to the app.
-  (function setupSocialAppLinks() {
-    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (!isMobile) return;
-    document.querySelectorAll('.social-icons a[data-app]').forEach(function(link) {
-      link.addEventListener('click', function(e) {
-        var appUrl = link.getAttribute('data-app');
-        var webUrl = link.getAttribute('href');
-        if (!appUrl || !webUrl || webUrl === '#') return;
-        e.preventDefault();
-        var start = Date.now();
-        window.location.href = appUrl;
-        setTimeout(function() {
-          // If still on the page after the timeout, the app didn't open —
-          // open the public URL in a new tab as the fallback.
-          if (Date.now() - start < 1600 && document.visibilityState !== 'hidden') {
-            window.open(webUrl, '_blank', 'noopener');
-          }
-        }, 800);
-      });
-    });
-  })();
-
   // --- Smooth Scroll for Anchor Links ---
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
