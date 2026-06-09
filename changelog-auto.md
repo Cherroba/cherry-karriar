@@ -4,6 +4,11 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-06-09 14:12
+- **Begärd av:** Systemet
+- **Ändring:** Teams-sökning misslyckades – Microsoft Graph returnerade rate limit (429) på samtliga 5 försök (0 av 43 chattar hann sökas). Kunde inte kontrollera om nya "Claude läs detta"-meddelanden finns. Manuell kontroll kan behövas.
+- **Fil(er):** –
+
 ## 2026-04-30 10:45
 - **Begärd av:** Anna Crociani
 - **Ändring:** Bytte bild på Vega Mårtensson – referens ändrad från Vega.jpeg till "Vega m.jpeg" (manuellt inlagd av Robert).
