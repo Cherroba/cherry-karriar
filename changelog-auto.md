@@ -4,6 +4,11 @@ Denna fil uppdateras automatiskt av det schemalagda jobbet "karriarsida-feedback
 
 ---
 
+## 2026-06-18 (schemalagd körning)
+- **Begärd av:** Systemet
+- **Ändring:** Inga nya "Claude läs detta"-meddelanden i triggerfönstret (senaste timmen) – inga textändringar gjorda. OBS: Det senaste meddelandet i chatten (Anna Crociani, skapat 2026-05-05) "ändra bilden på Vega Mårtensson till bifogad bild" saknas i changeloggen och verkar aldrig ha behandlats. Det kräver en bildbilaga och kan inte genomföras automatiskt. **Manuell åtgärd krävs – bilden måste läggas in manuellt i Karriar-mappen och refereras i Vega Mårtenssons testimonial-kort.**
+- **Fil(er):** –
+
 ## 2026-06-10 16:11
 - **Begärd av:** Systemet
 - **Ändring:** Sökningen efter "Claude läs detta" i senaste timmen returnerade inga nya meddelanden. Den bredare ikapp-sökningen (sedan föregående misslyckade körning 2026-06-09) blev dock ofullständig – Microsoft Graph rate limit (429) avbröt sökningen (som mest 12 av 43 chattar hann skannas, inga träffar i dessa). Inga textändringar gjorda. Manuell kontroll av Teams-chatten kan behövas för att utesluta missade meddelanden under perioden 2026-06-09 → 2026-06-10.
