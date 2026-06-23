@@ -193,6 +193,83 @@ document.addEventListener('DOMContentLoaded', () => {
     onRoadmapScroll();
   }
 
+  // --- Interactive timeline navigator (fixed year-rail, desktop) ---
+  // Built from the chapters so it stays in sync if they change. Each marker
+  // smooth-scrolls to its decade; the active marker + rail fill track scroll.
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+  if (chapters.length) {
+    var headerEl = document.querySelector('.site-header');
+
+    var nav = document.createElement('nav');
+    nav.className = 'om-timeline-nav';
+    nav.setAttribute('aria-label', 'Tidslinje – hoppa till ett årtionde');
+
+    var track = document.createElement('span');
+    track.className = 'om-tl-track';
+    var tlFill = document.createElement('span');
+    tlFill.className = 'om-tl-fill';
+    track.appendChild(tlFill);
+    nav.appendChild(track);
+
+    var navItems = chapters.map(function (ch, i) {
+      var yearEl = ch.querySelector('.chapter-year');
+      var year = yearEl ? yearEl.textContent.trim() : String(i + 1);
+
+      var item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'om-tl-item';
+      item.setAttribute('aria-label', 'Gå till ' + year);
+
+      var label = document.createElement('span');
+      label.className = 'om-tl-label';
+      label.textContent = year;
+      var dot = document.createElement('span');
+      dot.className = 'om-tl-dot';
+      item.appendChild(label);
+      item.appendChild(dot);
+
+      item.addEventListener('click', function () {
+        var headerH = headerEl ? headerEl.offsetHeight : 60;
+        var top = ch.getBoundingClientRect().top + window.pageYOffset - headerH - 24;
+        window.scrollTo({ top: top, behavior: prefersReduced ? 'auto' : 'smooth' });
+      });
+
+      nav.appendChild(item);
+      return item;
+    });
+
+    document.body.appendChild(nav);
+
+    var activeIdx = -1;
+    function onTimelineScroll() {
+      var ih = window.innerHeight;
+
+      // Active = the chapter whose centre is nearest a point ~45% down the viewport.
+      var best = 0, bestDist = Infinity;
+      for (var i = 0; i < chapters.length; i++) {
+        var r = chapters[i].getBoundingClientRect();
+        var d = Math.abs((r.top + r.height / 2) - ih * 0.45);
+        if (d < bestDist) { bestDist = d; best = i; }
+      }
+      if (best !== activeIdx) {
+        if (navItems[activeIdx]) navItems[activeIdx].classList.remove('is-active');
+        navItems[best].classList.add('is-active');
+        activeIdx = best;
+      }
+
+      // Rail fill = progress across the full span of chapters (guarded/clamped).
+      var firstTop = chapters[0].getBoundingClientRect().top + window.pageYOffset;
+      var lastRect = chapters[chapters.length - 1].getBoundingClientRect();
+      var span = (lastRect.top + lastRect.height + window.pageYOffset) - firstTop;
+      var p = span > 0 ? (window.pageYOffset + ih * 0.45 - firstTop) / span : 0;
+      tlFill.style.height = (Math.max(0, Math.min(1, p)) * 100) + '%';
+    }
+
+    window.addEventListener('scroll', rafThrottle(onTimelineScroll), { passive: true });
+    window.addEventListener('resize', rafThrottle(onTimelineScroll), { passive: true });
+    onTimelineScroll();
+  }
+
   // --- Social fade in (unified handler, works on all viewports) ---
   var socialSection = document.querySelector('.social-section');
   if (socialSection) {
