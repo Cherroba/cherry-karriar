@@ -132,13 +132,142 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }, {
-      threshold: 0.40,
-      rootMargin: '0px 0px -60px 0px'
+      // Low threshold so even chapters taller than the viewport reliably reveal;
+      // negative bottom margin holds the trigger until the chapter is comfortably in view.
+      threshold: 0.15,
+      rootMargin: '0px 0px -80px 0px'
     });
 
     animatedElements.forEach(el => observer.observe(el));
   } else {
     animatedElements.forEach(el => el.classList.add('is-visible'));
+  }
+
+  // --- Roadmap progress spine + subtle photo parallax ---
+  // One rafThrottle'd handler drives both: the spine fill grows as you advance
+  // through the history container, and each chapter photo drifts gently so the
+  // page feels like a road map you're travelling along.
+  var historiaContainer = document.getElementById('historiaContainer');
+  var progressFill = document.getElementById('omProgressFill');
+  var prefersReduced = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // One photo frame per chapter (querySelector picks the outermost .chapter-photo,
+  // so the nested markup in the 1990s chapter only drifts once).
+  var chapterPhotos = [];
+  document.querySelectorAll('.chapter').forEach(function (ch) {
+    var photo = ch.querySelector('.chapter-photo');
+    if (photo) chapterPhotos.push(photo);
+  });
+
+  if (historiaContainer && (progressFill || chapterPhotos.length)) {
+    function onRoadmapScroll() {
+      var ih = window.innerHeight;
+      var rect = historiaContainer.getBoundingClientRect();
+
+      // Fill: 0% when the container's top hits the viewport middle, 100% when its
+      // bottom passes the middle. Guarded against zero-height and clamped 0..1.
+      if (progressFill) {
+        var total = rect.height;
+        var progress = total > 0 ? ((ih * 0.5) - rect.top) / total : 0;
+        progress = Math.max(0, Math.min(1, progress));
+        progressFill.style.height = (progress * 100) + '%';
+      }
+
+      // Parallax: shift each on-screen photo up to ±14px based on how far its
+      // centre sits from the viewport centre. Skipped entirely for reduced-motion.
+      if (!prefersReduced) {
+        for (var i = 0; i < chapterPhotos.length; i++) {
+          var photo = chapterPhotos[i];
+          var pr = photo.getBoundingClientRect();
+          if (pr.bottom < 0 || pr.top > ih) continue; // off-screen — skip work
+          var fromCenter = ((pr.top + pr.height / 2) - ih / 2) / ih; // ~ -0.5..0.5
+          var shift = Math.max(-14, Math.min(14, fromCenter * -28));
+          photo.style.setProperty('--py', shift.toFixed(1) + 'px');
+        }
+      }
+    }
+
+    window.addEventListener('scroll', rafThrottle(onRoadmapScroll), { passive: true });
+    window.addEventListener('resize', rafThrottle(onRoadmapScroll), { passive: true });
+    onRoadmapScroll();
+  }
+
+  // --- Interactive timeline navigator (fixed year-rail, desktop) ---
+  // Built from the chapters so it stays in sync if they change. Each marker
+  // smooth-scrolls to its decade; the active marker + rail fill track scroll.
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+  if (chapters.length) {
+    var headerEl = document.querySelector('.site-header');
+
+    var nav = document.createElement('nav');
+    nav.className = 'om-timeline-nav';
+    nav.setAttribute('aria-label', 'Tidslinje – hoppa till ett årtionde');
+
+    var track = document.createElement('span');
+    track.className = 'om-tl-track';
+    var tlFill = document.createElement('span');
+    tlFill.className = 'om-tl-fill';
+    track.appendChild(tlFill);
+    nav.appendChild(track);
+
+    var navItems = chapters.map(function (ch, i) {
+      var yearEl = ch.querySelector('.chapter-year');
+      var year = yearEl ? yearEl.textContent.trim() : String(i + 1);
+
+      var item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'om-tl-item';
+      item.setAttribute('aria-label', 'Gå till ' + year);
+
+      var label = document.createElement('span');
+      label.className = 'om-tl-label';
+      label.textContent = year;
+      var dot = document.createElement('span');
+      dot.className = 'om-tl-dot';
+      item.appendChild(label);
+      item.appendChild(dot);
+
+      item.addEventListener('click', function () {
+        var headerH = headerEl ? headerEl.offsetHeight : 60;
+        var top = ch.getBoundingClientRect().top + window.pageYOffset - headerH - 24;
+        window.scrollTo({ top: top, behavior: prefersReduced ? 'auto' : 'smooth' });
+      });
+
+      nav.appendChild(item);
+      return item;
+    });
+
+    document.body.appendChild(nav);
+
+    var activeIdx = -1;
+    function onTimelineScroll() {
+      var ih = window.innerHeight;
+
+      // Active = the chapter whose centre is nearest a point ~45% down the viewport.
+      var best = 0, bestDist = Infinity;
+      for (var i = 0; i < chapters.length; i++) {
+        var r = chapters[i].getBoundingClientRect();
+        var d = Math.abs((r.top + r.height / 2) - ih * 0.45);
+        if (d < bestDist) { bestDist = d; best = i; }
+      }
+      if (best !== activeIdx) {
+        if (navItems[activeIdx]) navItems[activeIdx].classList.remove('is-active');
+        navItems[best].classList.add('is-active');
+        activeIdx = best;
+      }
+
+      // Rail fill = progress across the full span of chapters (guarded/clamped).
+      var firstTop = chapters[0].getBoundingClientRect().top + window.pageYOffset;
+      var lastRect = chapters[chapters.length - 1].getBoundingClientRect();
+      var span = (lastRect.top + lastRect.height + window.pageYOffset) - firstTop;
+      var p = span > 0 ? (window.pageYOffset + ih * 0.45 - firstTop) / span : 0;
+      tlFill.style.height = (Math.max(0, Math.min(1, p)) * 100) + '%';
+    }
+
+    window.addEventListener('scroll', rafThrottle(onTimelineScroll), { passive: true });
+    window.addEventListener('resize', rafThrottle(onTimelineScroll), { passive: true });
+    onTimelineScroll();
   }
 
   // --- Social fade in (unified handler, works on all viewports) ---
